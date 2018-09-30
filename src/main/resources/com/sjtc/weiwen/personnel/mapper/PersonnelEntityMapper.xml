@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.sjtc.weiwen.personnel.dao.PersonnelEntityMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sjtc.weiwen.personnel.dao.entity.PersonnelEntity">
+		<id column="oid" property="oid" jdbcType="VARCHAR" />
+		<result column="user_oid" property="userOid" jdbcType="VARCHAR" />
+		<result column="area_oid" property="areaOid" jdbcType="VARCHAR" />
+		<result column="personnel_type_oid" property="personnelTypeOid"
+			jdbcType="VARCHAR" />
+		<result column="real_name" property="realName"
+			jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="VARCHAR" />
+		<result column="nation" property="nation" jdbcType="VARCHAR" />
+		<result column="identity_card" property="identityCard"
+			jdbcType="VARCHAR" />
+		<result column="birthday" property="birthday" jdbcType="DATE" />
+		<result column="work_unit" property="workUnit"
+			jdbcType="VARCHAR" />
+		<result column="political_status" property="politicalStatus"
+			jdbcType="VARCHAR" />
+		<result column="domicile" property="domicile"
+			jdbcType="VARCHAR" />
+		<result column="present" property="present" jdbcType="VARCHAR" />
+		<result column="telephone" property="telephone"
+			jdbcType="VARCHAR" />
+		<result column="real_state" property="realState"
+			jdbcType="VARCHAR" />
+		<result column="more" property="more" jdbcType="INTEGER" />
+		<result column="risk_rating" property="riskRating"
+			jdbcType="VARCHAR" />
+		<result column="event_appeals" property="eventAppeals"
+			jdbcType="VARCHAR" />
+		<result column="insert_time" property="insertTime"
+			jdbcType="TIMESTAMP" />
+		<result column="edit_time" property="editTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs"
+		type="com.sjtc.weiwen.personnel.dao.entity.PersonnelEntity"
+		extends="BaseResultMap">
+		<result column="experience_results"
+			property="experienceResults" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		oid, user_oid, area_oid, personnel_type_oid, real_name,
+		sex, nation,
+		identity_card,
+		birthday, work_unit, political_status,
+		domicile, present, telephone,
+		real_state,
+		more, risk_rating,
+		event_appeals, insert_time, edit_time
+	</sql>
+	<sql id="Blob_Column_List">
+		experience_results
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from t_personnel
+		where oid = #{oid,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		t_personnel
+		where oid = #{oid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.sjtc.weiwen.personnel.dao.entity.PersonnelEntity">
+		insert into t_personnel (oid, user_oid, area_oid,
+		personnel_type_oid, real_name, sex,
+		nation, identity_card, birthday,
+		work_unit, political_status, domicile,
+		present, telephone, real_state,
+		more, risk_rating, event_appeals,
+		insert_time, edit_time,
+		experience_results
+		)
+		values (#{oid,jdbcType=VARCHAR},
+		#{userOid,jdbcType=VARCHAR},
+		#{areaOid,jdbcType=VARCHAR},
+		#{personnelTypeOid,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR},
+		#{sex,jdbcType=INTEGER},
+		#{nation,jdbcType=VARCHAR},
+		#{identityCard,jdbcType=VARCHAR},
+		#{birthday,jdbcType=DATE},
+		#{workUnit,jdbcType=VARCHAR}, #{politicalStatus,jdbcType=VARCHAR},
+		#{domicile,jdbcType=VARCHAR},
+		#{present,jdbcType=VARCHAR},
+		#{telephone,jdbcType=VARCHAR},
+		#{realState,jdbcType=VARCHAR},
+		#{more,jdbcType=INTEGER}, #{riskRating,jdbcType=VARCHAR},
+		#{eventAppeals,jdbcType=VARCHAR},
+		#{insertTime,jdbcType=TIMESTAMP},
+		#{editTime,jdbcType=TIMESTAMP},
+		#{experienceResults,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.sjtc.weiwen.personnel.dao.entity.PersonnelEntity">
+		insert into t_personnel
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				oid,
+			</if>
+			<if test="userOid != null">
+				user_oid,
+			</if>
+			<if test="areaOid != null">
+				area_oid,
+			</if>
+			<if test="personnelTypeOid != null">
+				personnel_type_oid,
+			</if>
+			<if test="realName != null">
+				real_name,
+			</if>
+			<if test="sex != null">
+				sex,
+			</if>
+			<if test="nation != null">
+				nation,
+			</if>
+			<if test="identityCard != null">
+				identity_card,
+			</if>
+			<if test="birthday != null">
+				birthday,
+			</if>
+			<if test="workUnit != null">
+				work_unit,
+			</if>
+			<if test="politicalStatus != null">
+				political_status,
+			</if>
+			<if test="domicile != null">
+				domicile,
+			</if>
+			<if test="present != null">
+				present,
+			</if>
+			<if test="telephone != null">
+				telephone,
+			</if>
+			<if test="realState != null">
+				real_state,
+			</if>
+			<if test="more != null">
+				more,
+			</if>
+			<if test="riskRating != null">
+				risk_rating,
+			</if>
+			<if test="eventAppeals != null">
+				event_appeals,
+			</if>
+			<if test="insertTime != null">
+				insert_time,
+			</if>
+			<if test="editTime != null">
+				edit_time,
+			</if>
+			<if test="experienceResults != null">
+				experience_results,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				#{oid,jdbcType=VARCHAR},
+			</if>
+			<if test="userOid != null">
+				#{userOid,jdbcType=VARCHAR},
+			</if>
+			<if test="areaOid != null">
+				#{areaOid,jdbcType=VARCHAR},
+			</if>
+			<if test="personnelTypeOid != null">
+				#{personnelTypeOid,jdbcType=VARCHAR},
+			</if>
+			<if test="realName != null">
+				#{realName,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=INTEGER},
+			</if>
+			<if test="nation != null">
+				#{nation,jdbcType=VARCHAR},
+			</if>
+			<if test="identityCard != null">
+				#{identityCard,jdbcType=VARCHAR},
+			</if>
+			<if test="birthday != null">
+				#{birthday,jdbcType=DATE},
+			</if>
+			<if test="workUnit != null">
+				#{workUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="politicalStatus != null">
+				#{politicalStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="domicile != null">
+				#{domicile,jdbcType=VARCHAR},
+			</if>
+			<if test="present != null">
+				#{present,jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null">
+				#{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="realState != null">
+				#{realState,jdbcType=VARCHAR},
+			</if>
+			<if test="more != null">
+				#{more,jdbcType=INTEGER},
+			</if>
+			<if test="riskRating != null">
+				#{riskRating,jdbcType=VARCHAR},
+			</if>
+			<if test="eventAppeals != null">
+				#{eventAppeals,jdbcType=VARCHAR},
+			</if>
+			<if test="insertTime != null">
+				#{insertTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="editTime != null">
+				#{editTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="experienceResults != null">
+				#{experienceResults,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.sjtc.weiwen.personnel.dao.entity.PersonnelEntity">
+		update t_personnel
+		<set>
+			<if test="userOid != null">
+				user_oid = #{userOid,jdbcType=VARCHAR},
+			</if>
+			<if test="areaOid != null">
+				area_oid = #{areaOid,jdbcType=VARCHAR},
+			</if>
+			<if test="personnelTypeOid != null">
+				personnel_type_oid =
+				#{personnelTypeOid,jdbcType=VARCHAR},
+			</if>
+			<if test="realName != null">
+				real_name = #{realName,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=INTEGER},
+			</if>
+			<if test="nation != null">
+				nation = #{nation,jdbcType=VARCHAR},
+			</if>
+			<if test="identityCard != null">
+				identity_card = #{identityCard,jdbcType=VARCHAR},
+			</if>
+			<if test="birthday != null">
+				birthday = #{birthday,jdbcType=DATE},
+			</if>
+			<if test="workUnit != null">
+				work_unit = #{workUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="politicalStatus != null">
+				political_status = #{politicalStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="domicile != null">
+				domicile = #{domicile,jdbcType=VARCHAR},
+			</if>
+			<if test="present != null">
+				present = #{present,jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null">
+				telephone = #{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="realState != null">
+				real_state = #{realState,jdbcType=VARCHAR},
+			</if>
+			<if test="more != null">
+				more = #{more,jdbcType=INTEGER},
+			</if>
+			<if test="riskRating != null">
+				risk_rating = #{riskRating,jdbcType=VARCHAR},
+			</if>
+			<if test="eventAppeals != null">
+				event_appeals = #{eventAppeals,jdbcType=VARCHAR},
+			</if>
+			<if test="insertTime != null">
+				insert_time = #{insertTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="editTime != null">
+				edit_time = #{editTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="experienceResults != null">
+				experience_results =
+				#{experienceResults,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs"
+		parameterType="com.sjtc.weiwen.personnel.dao.entity.PersonnelEntity">
+		update t_personnel
+		set user_oid =
+		#{userOid,jdbcType=VARCHAR},
+		area_oid = #{areaOid,jdbcType=VARCHAR},
+		personnel_type_oid = #{personnelTypeOid,jdbcType=VARCHAR},
+		real_name =
+		#{realName,jdbcType=VARCHAR},
+		sex = #{sex,jdbcType=INTEGER},
+		nation =
+		#{nation,jdbcType=VARCHAR},
+		identity_card =
+		#{identityCard,jdbcType=VARCHAR},
+		birthday = #{birthday,jdbcType=DATE},
+		work_unit = #{workUnit,jdbcType=VARCHAR},
+		political_status =
+		#{politicalStatus,jdbcType=VARCHAR},
+		domicile =
+		#{domicile,jdbcType=VARCHAR},
+		present = #{present,jdbcType=VARCHAR},
+		telephone = #{telephone,jdbcType=VARCHAR},
+		real_state =
+		#{realState,jdbcType=VARCHAR},
+		more = #{more,jdbcType=INTEGER},
+		risk_rating = #{riskRating,jdbcType=VARCHAR},
+		event_appeals =
+		#{eventAppeals,jdbcType=VARCHAR},
+		insert_time =
+		#{insertTime,jdbcType=TIMESTAMP},
+		edit_time =
+		#{editTime,jdbcType=TIMESTAMP},
+		experience_results =
+		#{experienceResults,jdbcType=LONGVARCHAR}
+		where oid =
+		#{oid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.sjtc.weiwen.personnel.dao.entity.PersonnelEntity">
+		update t_personnel
+		set user_oid =
+		#{userOid,jdbcType=VARCHAR},
+		area_oid = #{areaOid,jdbcType=VARCHAR},
+		personnel_type_oid = #{personnelTypeOid,jdbcType=VARCHAR},
+		real_name =
+		#{realName,jdbcType=VARCHAR},
+		sex = #{sex,jdbcType=INTEGER},
+		nation =
+		#{nation,jdbcType=VARCHAR},
+		identity_card =
+		#{identityCard,jdbcType=VARCHAR},
+		birthday = #{birthday,jdbcType=DATE},
+		work_unit = #{workUnit,jdbcType=VARCHAR},
+		political_status =
+		#{politicalStatus,jdbcType=VARCHAR},
+		domicile =
+		#{domicile,jdbcType=VARCHAR},
+		present = #{present,jdbcType=VARCHAR},
+		telephone = #{telephone,jdbcType=VARCHAR},
+		real_state =
+		#{realState,jdbcType=VARCHAR},
+		more = #{more,jdbcType=INTEGER},
+		risk_rating = #{riskRating,jdbcType=VARCHAR},
+		event_appeals =
+		#{eventAppeals,jdbcType=VARCHAR},
+		insert_time =
+		#{insertTime,jdbcType=TIMESTAMP},
+		edit_time =
+		#{editTime,jdbcType=TIMESTAMP}
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<select id="selectPersonnelsByFuzz"
+		resultMap="ResultMapWithBLOBs" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from t_personnel
+		<where>
+			1=1
+			<if test="areaOid != null and areaOid != ''">
+				and area_oid = #{areaOid,jdbcType=VARCHAR}
+			</if>
+			<if test="areaOids != null">
+				and area_oid in <foreach collection="areaOids" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+			</if>
+			<if test="personnelTypeOid != null and personnelTypeOid != ''">
+				and personnel_type_oid =
+				#{personnelTypeOid,jdbcType=VARCHAR}
+			</if>
+			<if test="realName != null and realName != ''">
+				and real_name like "%"#{realName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="sex != null and sex != ''">
+				and sex = #{sex,jdbcType=VARCHAR}
+			</if>
+			<if test="nation != null and nation != ''">
+				and nation = #{nation,jdbcType=VARCHAR}
+			</if>
+			<if test="identityCard != null and identityCard != ''">
+				and identity_card = #{identityCard,jdbcType=VARCHAR}
+			</if>
+			<if test="birthday != null and birthday != ''">
+				and birthday = #{birthday,jdbcType=DATE}
+			</if>
+			<if test="workUnit != null and workUnit != ''">
+				and work_unit = #{workUnit,jdbcType=VARCHAR}
+			</if>
+			<if test="politicalStatus != null and politicalStatus != ''">
+				and political_status =
+				#{politicalStatus,jdbcType=VARCHAR}
+			</if>
+			<if test="domicile != null and domicile != ''">
+				and domicile = #{domicile,jdbcType=VARCHAR}
+			</if>
+			<if test="present != null and present != ''">
+				and present = #{present,jdbcType=VARCHAR}
+			</if>
+			<if test="telephone != null and telephone != ''">
+				and telephone = #{telephone,jdbcType=VARCHAR}
+			</if>
+			<if test="realState != null and realState != ''">
+				and real_state = #{realState,jdbcType=VARCHAR}
+			</if>
+			<if test="riskRating != null and riskRating != ''">
+				and risk_rating = #{riskRating,jdbcType=VARCHAR}
+			</if>
+			<if test="eventAppeals != null and eventAppeals != ''">
+				and event_appeals = #{eventAppeals,jdbcType=VARCHAR}
+			</if>
+			<if test="experienceResults != null and experienceResults != ''">
+				and experience_results =
+				#{experienceResults,jdbcType=LONGVARCHAR}
+			</if>
+		</where>
+		order by insert_time desc
+	</select>
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.sjtc.weiwen.personnel.type.dao.PersonnelTypeEntityMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sjtc.weiwen.personnel.type.dao.entity.PersonnelTypeEntity">
+		<id column="oid" property="oid" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="p_oid" property="pOid" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		oid, title, p_oid
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_personnel_type
+		where oid = #{oid,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_personnel_type
+		where oid = #{oid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.sjtc.weiwen.personnel.type.dao.entity.PersonnelTypeEntity">
+		insert into t_personnel_type (oid, title, p_oid
+		)
+		values (#{oid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
+		#{pOid,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.sjtc.weiwen.personnel.type.dao.entity.PersonnelTypeEntity">
+		insert into t_personnel_type
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				oid,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="pOid != null">
+				p_oid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				#{oid,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="pOid != null">
+				#{pOid,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.sjtc.weiwen.personnel.type.dao.entity.PersonnelTypeEntity">
+		update t_personnel_type
+		<set>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="pOid != null">
+				p_oid = #{pOid,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.sjtc.weiwen.personnel.type.dao.entity.PersonnelTypeEntity">
+		update t_personnel_type
+		set title = #{title,jdbcType=VARCHAR},
+		p_oid = #{pOid,jdbcType=VARCHAR}
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<select id="selectTypesByFuzz" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_personnel_type
+	</select>
+	<select id="selectTypesByPOid" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_personnel_type
+		where p_oid = #{oid, jdbcType=VARCHAR}
+	</select>
+</mapper>

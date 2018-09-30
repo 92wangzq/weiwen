@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.sjtc.weiwen.document.dao.DocumentEntityMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sjtc.weiwen.document.dao.entity.DocumentEntity">
+		<id column="oid" property="oid" jdbcType="VARCHAR" />
+		<result column="document_number" property="documentNumber"
+			jdbcType="VARCHAR" />
+		<result column="file_oid" property="fileOid" jdbcType="VARCHAR" />
+		<result column="column_oid" property="columnOid"
+			jdbcType="VARCHAR" />
+		<result column="user_oid" property="userOid" jdbcType="VARCHAR" />
+		<result column="description" property="description"
+			jdbcType="VARCHAR" />
+		<result column="insert_time" property="insertTime"
+			jdbcType="TIMESTAMP" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="download_num" property="downloadNum"
+			jdbcType="INTEGER" />
+		<result column="remarks" property="remarks" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		oid, document_number, file_oid, column_oid, user_oid, description,
+		insert_time, title,
+		download_num, remarks, update_time
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_document
+		where oid = #{oid,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_document
+		where oid = #{oid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.sjtc.weiwen.document.dao.entity.DocumentEntity">
+		insert into t_document (oid, document_number, file_oid,
+		column_oid, user_oid, description,
+		insert_time, title, download_num,
+		remarks, update_time)
+		values (#{oid,jdbcType=VARCHAR}, #{documentNumber,jdbcType=VARCHAR},
+		#{fileOid,jdbcType=VARCHAR},
+		#{columnOid,jdbcType=VARCHAR}, #{userOid,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+		#{insertTime,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR},
+		#{downloadNum,jdbcType=INTEGER},
+		#{remarks,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.sjtc.weiwen.document.dao.entity.DocumentEntity">
+		insert into t_document
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				oid,
+			</if>
+			<if test="documentNumber != null">
+				document_number,
+			</if>
+			<if test="fileOid != null">
+				file_oid,
+			</if>
+			<if test="columnOid != null">
+				column_oid,
+			</if>
+			<if test="userOid != null">
+				user_oid,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="insertTime != null">
+				insert_time,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="downloadNum != null">
+				download_num,
+			</if>
+			<if test="remarks != null">
+				remarks,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				#{oid,jdbcType=VARCHAR},
+			</if>
+			<if test="documentNumber != null">
+				#{documentNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="fileOid != null">
+				#{fileOid,jdbcType=VARCHAR},
+			</if>
+			<if test="columnOid != null">
+				#{columnOid,jdbcType=VARCHAR},
+			</if>
+			<if test="userOid != null">
+				#{userOid,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="insertTime != null">
+				#{insertTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="downloadNum != null">
+				#{downloadNum,jdbcType=INTEGER},
+			</if>
+			<if test="remarks != null">
+				#{remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.sjtc.weiwen.document.dao.entity.DocumentEntity">
+		update t_document
+		<set>
+			<if test="documentNumber != null">
+				document_number = #{documentNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="fileOid != null">
+				file_oid = #{fileOid,jdbcType=VARCHAR},
+			</if>
+			<if test="columnOid != null">
+				column_oid = #{columnOid,jdbcType=VARCHAR},
+			</if>
+			<if test="userOid != null">
+				user_oid = #{userOid,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="insertTime != null">
+				insert_time = #{insertTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="downloadNum != null">
+				download_num = #{downloadNum,jdbcType=INTEGER},
+			</if>
+			<if test="remarks != null">
+				remarks = #{remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.sjtc.weiwen.document.dao.entity.DocumentEntity">
+		update t_document
+		set document_number = #{documentNumber,jdbcType=VARCHAR},
+		file_oid = #{fileOid,jdbcType=VARCHAR},
+		column_oid = #{columnOid,jdbcType=VARCHAR},
+		user_oid = #{userOid,jdbcType=VARCHAR},
+		description = #{description,jdbcType=VARCHAR},
+		insert_time = #{insertTime,jdbcType=TIMESTAMP},
+		title = #{title,jdbcType=VARCHAR},
+		download_num = #{downloadNum,jdbcType=INTEGER},
+		remarks = #{remarks,jdbcType=VARCHAR},
+		update_time = #{updateTime,jdbcType=TIMESTAMP}
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<select id="selectDocumentsByFuzz" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from t_document
+		<where>
+			1=1
+			<if test="title != null and title != ''">
+				and title like "%"#{title, jdbcType=VARCHAR}"%"
+			</if>
+			<if test="columnOid != null and columnOid != ''">
+				and column_oid = #{columnOid, jdbcType=VARCHAR}
+			</if>
+			<if test="startTime != null">
+				and insert_time &gt; #{startTime, jdbcType=VARCHAR}
+			</if>
+			<if test="endTime != null">
+				and insert_time &lt; #{endTime, jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by insert_time desc
+	</select>
+</mapper>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.sjtc.weiwen.administrative.dao.AdministrativeAreaEntityMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sjtc.weiwen.administrative.dao.entity.AdministrativeAreaEntity">
+		<id column="oid" property="oid" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="p_oid" property="pOid" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		oid, title, p_oid
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_administrative_area
+		where oid = #{oid,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_administrative_area
+		where oid = #{oid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.sjtc.weiwen.administrative.dao.entity.AdministrativeAreaEntity">
+		insert into t_administrative_area (oid, title, p_oid
+		)
+		values (#{oid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
+		#{pOid,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.sjtc.weiwen.administrative.dao.entity.AdministrativeAreaEntity">
+		insert into t_administrative_area
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				oid,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="pOid != null">
+				p_oid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				#{oid,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="pOid != null">
+				#{pOid,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.sjtc.weiwen.administrative.dao.entity.AdministrativeAreaEntity">
+		update t_administrative_area
+		<set>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="pOid != null">
+				p_oid = #{pOid,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.sjtc.weiwen.administrative.dao.entity.AdministrativeAreaEntity">
+		update t_administrative_area
+		set title = #{title,jdbcType=VARCHAR},
+		p_oid = #{pOid,jdbcType=VARCHAR}
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<select id="selectAreaListPage" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from t_administrative_area
+		<if test="title != null">
+			where
+			title like '%#{title, jdbcType=VARCHAR}%'
+		</if>
+	</select>
+	<select id="selectChildrensByOid" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="Base_Column_List" />
+		from t_administrative_area
+		where
+		<if test="_parameter != null">
+			p_oid = #{pOid, jdbcType=VARCHAR}
+		</if>
+		<if test="_parameter == null">
+			p_oid = 0
+		</if>
+	</select>
+</mapper>

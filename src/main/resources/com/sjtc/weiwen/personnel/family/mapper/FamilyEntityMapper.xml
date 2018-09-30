@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.sjtc.weiwen.personnel.family.dao.FamilyEntityMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sjtc.weiwen.personnel.family.dao.entity.FamilyEntity">
+		<id column="oid" property="oid" jdbcType="VARCHAR" />
+		<result column="personnel_oid" property="personnelOid"
+			jdbcType="VARCHAR" />
+		<result column="relationship" property="relationship"
+			jdbcType="VARCHAR" />
+		<result column="real_name" property="realName"
+			jdbcType="VARCHAR" />
+		<result column="nation" property="nation" jdbcType="VARCHAR" />
+		<result column="identity_card" property="identityCard"
+			jdbcType="VARCHAR" />
+		<result column="work_unit" property="workUnit"
+			jdbcType="VARCHAR" />
+		<result column="domicile" property="domicile"
+			jdbcType="VARCHAR" />
+		<result column="present" property="present" jdbcType="VARCHAR" />
+		<result column="telephone" property="telephone"
+			jdbcType="VARCHAR" />
+		<result column="insert_time" property="insertTime"
+			jdbcType="TIMESTAMP" />
+		<result column="edit_time" property="editTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		oid, personnel_oid, relationship, real_name, nation, identity_card,
+		work_unit, domicile,
+		present, telephone, insert_time, edit_time
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_family
+		where oid = #{oid,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_family
+		where oid = #{oid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.sjtc.weiwen.personnel.family.dao.entity.FamilyEntity">
+		insert into t_family (oid, personnel_oid, relationship,
+		real_name, nation, identity_card,
+		work_unit, domicile, present,
+		telephone, insert_time, edit_time
+		)
+		values (#{oid,jdbcType=VARCHAR}, #{personnelOid,jdbcType=VARCHAR},
+		#{relationship,jdbcType=VARCHAR},
+		#{realName,jdbcType=VARCHAR}, #{nation,jdbcType=VARCHAR}, #{identityCard,jdbcType=VARCHAR},
+		#{workUnit,jdbcType=VARCHAR}, #{domicile,jdbcType=VARCHAR},
+		#{present,jdbcType=VARCHAR},
+		#{telephone,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP}, #{editTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.sjtc.weiwen.personnel.family.dao.entity.FamilyEntity">
+		insert into t_family
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				oid,
+			</if>
+			<if test="personnelOid != null">
+				personnel_oid,
+			</if>
+			<if test="relationship != null">
+				relationship,
+			</if>
+			<if test="realName != null">
+				real_name,
+			</if>
+			<if test="nation != null">
+				nation,
+			</if>
+			<if test="identityCard != null">
+				identity_card,
+			</if>
+			<if test="workUnit != null">
+				work_unit,
+			</if>
+			<if test="domicile != null">
+				domicile,
+			</if>
+			<if test="present != null">
+				present,
+			</if>
+			<if test="telephone != null">
+				telephone,
+			</if>
+			<if test="insertTime != null">
+				insert_time,
+			</if>
+			<if test="editTime != null">
+				edit_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				#{oid,jdbcType=VARCHAR},
+			</if>
+			<if test="personnelOid != null">
+				#{personnelOid,jdbcType=VARCHAR},
+			</if>
+			<if test="relationship != null">
+				#{relationship,jdbcType=VARCHAR},
+			</if>
+			<if test="realName != null">
+				#{realName,jdbcType=VARCHAR},
+			</if>
+			<if test="nation != null">
+				#{nation,jdbcType=VARCHAR},
+			</if>
+			<if test="identityCard != null">
+				#{identityCard,jdbcType=VARCHAR},
+			</if>
+			<if test="workUnit != null">
+				#{workUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="domicile != null">
+				#{domicile,jdbcType=VARCHAR},
+			</if>
+			<if test="present != null">
+				#{present,jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null">
+				#{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="insertTime != null">
+				#{insertTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="editTime != null">
+				#{editTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.sjtc.weiwen.personnel.family.dao.entity.FamilyEntity">
+		update t_family
+		<set>
+			<if test="personnelOid != null">
+				personnel_oid = #{personnelOid,jdbcType=VARCHAR},
+			</if>
+			<if test="relationship != null">
+				relationship = #{relationship,jdbcType=VARCHAR},
+			</if>
+			<if test="realName != null">
+				real_name = #{realName,jdbcType=VARCHAR},
+			</if>
+			<if test="nation != null">
+				nation = #{nation,jdbcType=VARCHAR},
+			</if>
+			<if test="identityCard != null">
+				identity_card = #{identityCard,jdbcType=VARCHAR},
+			</if>
+			<if test="workUnit != null">
+				work_unit = #{workUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="domicile != null">
+				domicile = #{domicile,jdbcType=VARCHAR},
+			</if>
+			<if test="present != null">
+				present = #{present,jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null">
+				telephone = #{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="insertTime != null">
+				insert_time = #{insertTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="editTime != null">
+				edit_time = #{editTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.sjtc.weiwen.personnel.family.dao.entity.FamilyEntity">
+		update t_family
+		set personnel_oid = #{personnelOid,jdbcType=VARCHAR},
+		relationship = #{relationship,jdbcType=VARCHAR},
+		real_name = #{realName,jdbcType=VARCHAR},
+		nation = #{nation,jdbcType=VARCHAR},
+		identity_card = #{identityCard,jdbcType=VARCHAR},
+		work_unit = #{workUnit,jdbcType=VARCHAR},
+		domicile = #{domicile,jdbcType=VARCHAR},
+		present = #{present,jdbcType=VARCHAR},
+		telephone = #{telephone,jdbcType=VARCHAR},
+		insert_time = #{insertTime,jdbcType=TIMESTAMP},
+		edit_time = #{editTime,jdbcType=TIMESTAMP}
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<select id="selectFamilysByPersonnelOid" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_family where personnel_oid = #{personnelOid,jdbcType=VARCHAR}
+	</select>
+</mapper>

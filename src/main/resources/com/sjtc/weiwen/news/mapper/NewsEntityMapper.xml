@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjtc.weiwen.news.dao.NewsEntityMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sjtc.weiwen.news.dao.entity.NewsEntity">
+		<id column="oid" property="oid" jdbcType="VARCHAR" />
+		<result column="user_oid" property="userOid" jdbcType="VARCHAR" />
+		<result column="column_oid" property="columnOid"
+			jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="file_oid" property="fileOid" jdbcType="VARCHAR" />
+		<result column="insert_time" property="insertTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs"
+		type="com.sjtc.weiwen.news.dao.entity.NewsEntity"
+		extends="BaseResultMap">
+		<result column="content" property="content"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		oid, user_oid, column_oid, title, file_oid, insert_time
+	</sql>
+	<sql id="Blob_Column_List">
+		content
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from t_news
+		where oid = #{oid,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_news
+		where oid = #{oid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.sjtc.weiwen.news.dao.entity.NewsEntity">
+		insert into t_news (oid, user_oid, column_oid,
+		title, file_oid, insert_time,
+		content)
+		values (#{oid,jdbcType=VARCHAR}, #{userOid,jdbcType=VARCHAR},
+		#{columnOid,jdbcType=VARCHAR},
+		#{title,jdbcType=VARCHAR}, #{fileOid,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP},
+		#{content,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.sjtc.weiwen.news.dao.entity.NewsEntity">
+		insert into t_news
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				oid,
+			</if>
+			<if test="userOid != null">
+				user_oid,
+			</if>
+			<if test="columnOid != null">
+				column_oid,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="fileOid != null">
+				file_oid,
+			</if>
+			<if test="insertTime != null">
+				insert_time,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				#{oid,jdbcType=VARCHAR},
+			</if>
+			<if test="userOid != null">
+				#{userOid,jdbcType=VARCHAR},
+			</if>
+			<if test="columnOid != null">
+				#{columnOid,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="fileOid != null">
+				#{fileOid,jdbcType=VARCHAR},
+			</if>
+			<if test="insertTime != null">
+				#{insertTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.sjtc.weiwen.news.dao.entity.NewsEntity">
+		update t_news
+		<set>
+			<if test="userOid != null">
+				user_oid = #{userOid,jdbcType=VARCHAR},
+			</if>
+			<if test="columnOid != null">
+				column_oid = #{columnOid,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="fileOid != null">
+				file_oid = #{fileOid,jdbcType=VARCHAR},
+			</if>
+			<if test="insertTime != null">
+				insert_time = #{insertTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs"
+		parameterType="com.sjtc.weiwen.news.dao.entity.NewsEntity">
+		update t_news
+		set user_oid = #{userOid,jdbcType=VARCHAR},
+		column_oid = #{columnOid,jdbcType=VARCHAR},
+		title = #{title,jdbcType=VARCHAR},
+		file_oid = #{fileOid,jdbcType=VARCHAR},
+		insert_time = #{insertTime,jdbcType=TIMESTAMP},
+		content = #{content,jdbcType=LONGVARCHAR}
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.sjtc.weiwen.news.dao.entity.NewsEntity">
+		update t_news
+		set user_oid = #{userOid,jdbcType=VARCHAR},
+		column_oid = #{columnOid,jdbcType=VARCHAR},
+		title = #{title,jdbcType=VARCHAR},
+		file_oid = #{fileOid,jdbcType=VARCHAR},
+		insert_time = #{insertTime,jdbcType=TIMESTAMP}
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<select id="selectNewsByFuzz" resultMap="ResultMapWithBLOBs" parameterType="map">
+		select 
+		<include refid="Base_Column_List" />,
+		<include refid="Blob_Column_List" />
+		from t_news
+		<where>
+			1=1
+			<if test="title != null and title != ''">
+				and title like "%"#{title, jdbcType=VARCHAR}"%"
+			</if>
+			<if test="columnOid != null and columnOid != ''">
+				and column_oid = #{columnOid, jdbcType=VARCHAR}
+			</if>
+			<if test="startTime != null">
+				and insert_time &gt; #{startTime, jdbcType=VARCHAR}
+			</if>
+			<if test="endTime != null">
+				and insert_time &lt; #{endTime, jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by insert_time desc
+	</select>
+</mapper>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.sjtc.weiwen.document.log.dao.DocumentLogEntityMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sjtc.weiwen.document.log.dao.entity.DocumentLogEntity">
+		<id column="oid" property="oid" jdbcType="VARCHAR" />
+		<result column="user_oid" property="userOid" jdbcType="VARCHAR" />
+		<result column="document_oid" property="documentOid"
+			jdbcType="VARCHAR" />
+		<result column="download_time" property="downloadTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		oid, user_oid, document_oid, download_time
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_document_log
+		where oid = #{oid,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_document_log
+		where oid = #{oid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.sjtc.weiwen.document.log.dao.entity.DocumentLogEntity">
+		insert into t_document_log (oid, user_oid, document_oid,
+		download_time)
+		values (#{oid,jdbcType=VARCHAR}, #{userOid,jdbcType=VARCHAR},
+		#{documentOid,jdbcType=VARCHAR},
+		#{downloadTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.sjtc.weiwen.document.log.dao.entity.DocumentLogEntity">
+		insert into t_document_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				oid,
+			</if>
+			<if test="userOid != null">
+				user_oid,
+			</if>
+			<if test="documentOid != null">
+				document_oid,
+			</if>
+			<if test="downloadTime != null">
+				download_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				#{oid,jdbcType=VARCHAR},
+			</if>
+			<if test="userOid != null">
+				#{userOid,jdbcType=VARCHAR},
+			</if>
+			<if test="documentOid != null">
+				#{documentOid,jdbcType=VARCHAR},
+			</if>
+			<if test="downloadTime != null">
+				#{downloadTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.sjtc.weiwen.document.log.dao.entity.DocumentLogEntity">
+		update t_document_log
+		<set>
+			<if test="userOid != null">
+				user_oid = #{userOid,jdbcType=VARCHAR},
+			</if>
+			<if test="documentOid != null">
+				document_oid = #{documentOid,jdbcType=VARCHAR},
+			</if>
+			<if test="downloadTime != null">
+				download_time = #{downloadTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.sjtc.weiwen.document.log.dao.entity.DocumentLogEntity">
+		update t_document_log
+		set user_oid = #{userOid,jdbcType=VARCHAR},
+		document_oid = #{documentOid,jdbcType=VARCHAR},
+		download_time = #{downloadTime,jdbcType=TIMESTAMP}
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<select id="selectByDocumentOid" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select <include refid="Base_Column_List" /> from t_document_log where document_oid = #{documentOid, jdbcType=VARCHAR}
+	</select>
+</mapper>
