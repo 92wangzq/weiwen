@@ -1,6 +1,6 @@
-package com.sjtc.weiwen.role.dao;
+package com.sjtc.weiwen.system.dao;
 
-import com.sjtc.weiwen.role.dao.entity.SysRoleEntity;
+import com.sjtc.weiwen.system.dao.entity.SysRoleEntity;
 
 public interface SysRoleEntityMapper {
     int deleteByPrimaryKey(String oid);

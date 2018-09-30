@@ -1,7 +1,5 @@
 package com.sjtc.shiro.config;
 
-import java.util.List;
-
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -15,40 +13,28 @@ import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSON;
-import com.sjtc.weiwen.permission.controllers.form.SysPermissionVO;
-import com.sjtc.weiwen.permission.services.ISysPermissionService;
-import com.sjtc.weiwen.role.dao.entity.SysRoleEntity;
-import com.sjtc.weiwen.role.services.ISysRoleService;
+import com.sjtc.weiwen.system.controllers.form.PermissionVO;
+import com.sjtc.weiwen.system.controllers.form.RoleVO;
 import com.sjtc.weiwen.user.controllers.form.UserVO;
 import com.sjtc.weiwen.user.services.IUserService;
 
 public class MyShiroRealm extends AuthorizingRealm {
 
 	@Autowired
-	private ISysRoleService sysRoleService;
-	@Autowired
-	private ISysPermissionService sysPermissionService;
-	@Autowired
 	private IUserService userService;
 
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-//      System.out.println("权限配置-->MyShiroRealm.doGetAuthorizationInfo()");        
+		System.out.println("权限配置-->MyShiroRealm.doGetAuthorizationInfo()");
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-//		String string = JSON.toJSON(principals.getPrimaryPrincipal()).toString();
-//		UserVO user = JSON.parseObject(string, UserVO.class);
-//		try {
-//			List<SysRoleEntity> roles = sysRoleService.selectRoleByUser(user);
-//			for (SysRoleEntity role : roles) {
-//				authorizationInfo.addRole(role.getRole());
-//			}
-//			List<SysPermissionVO> sysPermissions = sysPermissionService.selectPermByUser(user);
-//			for (SysPermissionVO perm : sysPermissions) {
-//				authorizationInfo.addStringPermission(perm.getPermission());
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		String string = JSON.toJSON(principals.getPrimaryPrincipal()).toString();
+		UserVO user = JSON.parseObject(string, UserVO.class);
+		for (RoleVO role : user.getRoles()) {
+			authorizationInfo.addRole(role.getRole());
+			for (PermissionVO permission : role.getPermissions()) {
+				authorizationInfo.addStringPermission(permission.getPermission());
+			}
+		}
 		return authorizationInfo;
 
 	}

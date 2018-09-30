@@ -1,6 +1,7 @@
-package com.sjtc.weiwen.permission.dao.entity;
+package com.sjtc.weiwen.system.dao.entity;
 
 public class SysPermissionEntity {
+	
     private String oid;
 
     private Boolean available;

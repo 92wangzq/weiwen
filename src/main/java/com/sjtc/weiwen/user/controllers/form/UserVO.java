@@ -2,9 +2,11 @@ package com.sjtc.weiwen.user.controllers.form;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sjtc.weiwen.administrative.controllers.form.AdministrativeAreaVO;
+import com.sjtc.weiwen.system.controllers.form.RoleVO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -47,6 +49,11 @@ public class UserVO implements Serializable {
 
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+    
+    /**
+     * 角色
+     */
+    private List<RoleVO> roles;
     
     /**
 	 * 密码盐.

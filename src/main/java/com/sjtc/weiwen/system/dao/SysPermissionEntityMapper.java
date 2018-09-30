@@ -1,6 +1,6 @@
-package com.sjtc.weiwen.permission.dao;
+package com.sjtc.weiwen.system.dao;
 
-import com.sjtc.weiwen.permission.dao.entity.SysPermissionEntity;
+import com.sjtc.weiwen.system.dao.entity.SysPermissionEntity;
 
 public interface SysPermissionEntityMapper {
     int deleteByPrimaryKey(String oid);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sjtc.weiwen.permission.dao.SysPermissionEntityMapper" >
-  <resultMap id="BaseResultMap" type="com.sjtc.weiwen.permission.dao.entity.SysPermissionEntity" >
+<mapper namespace="com.sjtc.weiwen.system.dao.SysPermissionEntityMapper" >
+  <resultMap id="BaseResultMap" type="com.sjtc.weiwen.system.dao.entity.SysPermissionEntity" >
     <id column="oid" property="oid" jdbcType="VARCHAR" />
     <result column="available" property="available" jdbcType="BIT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
@@ -24,7 +24,7 @@
     delete from t_sys_permission
     where oid = #{oid,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.sjtc.weiwen.permission.dao.entity.SysPermissionEntity" >
+  <insert id="insert" parameterType="com.sjtc.weiwen.system.dao.entity.SysPermissionEntity" >
     insert into t_sys_permission (oid, available, name, 
       parent_id, parent_ids, permission, 
       resource_type, url)
@@ -32,7 +32,7 @@
       #{parentId,jdbcType=BIGINT}, #{parentIds,jdbcType=VARCHAR}, #{permission,jdbcType=VARCHAR}, 
       #{resourceType,jdbcType=CHAR}, #{url,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.sjtc.weiwen.permission.dao.entity.SysPermissionEntity" >
+  <insert id="insertSelective" parameterType="com.sjtc.weiwen.system.dao.entity.SysPermissionEntity" >
     insert into t_sys_permission
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="oid != null" >
@@ -87,7 +87,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.sjtc.weiwen.permission.dao.entity.SysPermissionEntity" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.sjtc.weiwen.system.dao.entity.SysPermissionEntity" >
     update t_sys_permission
     <set >
       <if test="available != null" >
@@ -114,7 +114,7 @@
     </set>
     where oid = #{oid,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.sjtc.weiwen.permission.dao.entity.SysPermissionEntity" >
+  <update id="updateByPrimaryKey" parameterType="com.sjtc.weiwen.system.dao.entity.SysPermissionEntity" >
     update t_sys_permission
     set available = #{available,jdbcType=BIT},
       name = #{name,jdbcType=VARCHAR},

@@ -48,7 +48,7 @@ public class HomeController {
 			System.out.println(currentUser.getSession().getId());
 			currentUser.getSession().setAttribute("user", user.getOid());
 			Cookie userCookie = new Cookie("user", user.getRealName());
-			userCookie.setMaxAge(30*24*60*60);   //存活期为一个月 30*24*60*60
+			userCookie.setMaxAge(3000);   //存活期为一个月 30*24*60*60
             userCookie.setPath("/");
             res.addCookie(userCookie);
 			baseResult.setCode("00000");

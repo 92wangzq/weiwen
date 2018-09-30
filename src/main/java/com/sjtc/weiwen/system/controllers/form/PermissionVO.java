@@ -1,4 +1,6 @@
-package com.sjtc.weiwen.permission.controllers.form;
+package com.sjtc.weiwen.system.controllers.form;
+
+import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +13,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class SysPermissionVO {
+public class PermissionVO implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3342719275145431082L;
 
 	private String oid;
 

@@ -1,4 +1,4 @@
-package com.sjtc.weiwen.role.dao.entity;
+package com.sjtc.weiwen.system.dao.entity;
 
 public class SysRoleEntity {
     private String oid;
