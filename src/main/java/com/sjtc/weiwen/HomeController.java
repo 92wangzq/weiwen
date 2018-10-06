@@ -47,13 +47,19 @@ public class HomeController {
 			UserVO user = JSON.parseObject(string, UserVO.class);
 			System.out.println(currentUser.getSession().getId());
 			currentUser.getSession().setAttribute("user", user.getOid());
-			Cookie userCookie = new Cookie("user", user.getRealName());
-			userCookie.setMaxAge(3000);   //存活期为一个月 30*24*60*60
-            userCookie.setPath("/");
-            res.addCookie(userCookie);
+			Cookie userName = new Cookie("userName", user.getRealName());
+			userName.setMaxAge(3000);   //存活期为一个月 30*24*60*60
+			userName.setPath("/");
+            res.addCookie(userName);
+            Cookie userOid = new Cookie("userOid", user.getOid());
+            userOid.setMaxAge(3000);
+            userOid.setPath("/");
+            res.addCookie(userOid);
+            
 			baseResult.setCode("00000");
 			baseResult.setMessage("登录成功");
 			baseResult.setToken(currentUser.getSession().getId());
+			System.out.println(baseResult.getToken());
 		} catch (IncorrectCredentialsException e) {
 			baseResult.setCode("-10000");
 			baseResult.setMessage("密码错误");
@@ -71,16 +77,19 @@ public class HomeController {
 
 	@RequestMapping(value = "/logout", method = RequestMethod.POST, produces = "application/json")
 	public @ResponseBody ResponseEntity<BaseResult> logout(HttpServletRequest req, HttpServletResponse res) {
-		HttpSession session = req.getSession();
-		session.removeAttribute("user");
-		Cookie user = new Cookie("user", null);
-		user.setMaxAge(0);
-		user.setPath("/");
-		res.addCookie(user);
-		Cookie userType = new Cookie("userType", null);
-		userType.setMaxAge(0);
-		userType.setPath("/");
-		res.addCookie(userType);
+		if (SecurityUtils.getSubject().getPrincipal() != null) {
+			SecurityUtils.getSubject().logout();
+		}
+//		HttpSession session = req.getSession();
+//		session.removeAttribute("user");
+		Cookie userName = new Cookie("userName", null);
+		userName.setMaxAge(0);
+		userName.setPath("/");
+		res.addCookie(userName);
+		Cookie userOid = new Cookie("userOid", null);
+		userOid.setMaxAge(0);
+		userOid.setPath("/");
+		res.addCookie(userOid);
 		return new ResponseEntity<BaseResult>(new BaseResult(), HttpStatus.OK);
 	}
 	

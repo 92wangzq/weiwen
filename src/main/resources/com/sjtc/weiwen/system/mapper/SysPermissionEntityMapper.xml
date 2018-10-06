@@ -1,128 +1,184 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sjtc.weiwen.system.dao.SysPermissionEntityMapper" >
-  <resultMap id="BaseResultMap" type="com.sjtc.weiwen.system.dao.entity.SysPermissionEntity" >
-    <id column="oid" property="oid" jdbcType="VARCHAR" />
-    <result column="available" property="available" jdbcType="BIT" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="parent_id" property="parentId" jdbcType="BIGINT" />
-    <result column="parent_ids" property="parentIds" jdbcType="VARCHAR" />
-    <result column="permission" property="permission" jdbcType="VARCHAR" />
-    <result column="resource_type" property="resourceType" jdbcType="CHAR" />
-    <result column="url" property="url" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    oid, available, name, parent_id, parent_ids, permission, resource_type, url
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from t_sys_permission
-    where oid = #{oid,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from t_sys_permission
-    where oid = #{oid,jdbcType=VARCHAR}
-  </delete>
-  <insert id="insert" parameterType="com.sjtc.weiwen.system.dao.entity.SysPermissionEntity" >
-    insert into t_sys_permission (oid, available, name, 
-      parent_id, parent_ids, permission, 
-      resource_type, url)
-    values (#{oid,jdbcType=VARCHAR}, #{available,jdbcType=BIT}, #{name,jdbcType=VARCHAR}, 
-      #{parentId,jdbcType=BIGINT}, #{parentIds,jdbcType=VARCHAR}, #{permission,jdbcType=VARCHAR}, 
-      #{resourceType,jdbcType=CHAR}, #{url,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.sjtc.weiwen.system.dao.entity.SysPermissionEntity" >
-    insert into t_sys_permission
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="oid != null" >
-        oid,
-      </if>
-      <if test="available != null" >
-        available,
-      </if>
-      <if test="name != null" >
-        name,
-      </if>
-      <if test="parentId != null" >
-        parent_id,
-      </if>
-      <if test="parentIds != null" >
-        parent_ids,
-      </if>
-      <if test="permission != null" >
-        permission,
-      </if>
-      <if test="resourceType != null" >
-        resource_type,
-      </if>
-      <if test="url != null" >
-        url,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="oid != null" >
-        #{oid,jdbcType=VARCHAR},
-      </if>
-      <if test="available != null" >
-        #{available,jdbcType=BIT},
-      </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="parentId != null" >
-        #{parentId,jdbcType=BIGINT},
-      </if>
-      <if test="parentIds != null" >
-        #{parentIds,jdbcType=VARCHAR},
-      </if>
-      <if test="permission != null" >
-        #{permission,jdbcType=VARCHAR},
-      </if>
-      <if test="resourceType != null" >
-        #{resourceType,jdbcType=CHAR},
-      </if>
-      <if test="url != null" >
-        #{url,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.sjtc.weiwen.system.dao.entity.SysPermissionEntity" >
-    update t_sys_permission
-    <set >
-      <if test="available != null" >
-        available = #{available,jdbcType=BIT},
-      </if>
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="parentId != null" >
-        parent_id = #{parentId,jdbcType=BIGINT},
-      </if>
-      <if test="parentIds != null" >
-        parent_ids = #{parentIds,jdbcType=VARCHAR},
-      </if>
-      <if test="permission != null" >
-        permission = #{permission,jdbcType=VARCHAR},
-      </if>
-      <if test="resourceType != null" >
-        resource_type = #{resourceType,jdbcType=CHAR},
-      </if>
-      <if test="url != null" >
-        url = #{url,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where oid = #{oid,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.sjtc.weiwen.system.dao.entity.SysPermissionEntity" >
-    update t_sys_permission
-    set available = #{available,jdbcType=BIT},
-      name = #{name,jdbcType=VARCHAR},
-      parent_id = #{parentId,jdbcType=BIGINT},
-      parent_ids = #{parentIds,jdbcType=VARCHAR},
-      permission = #{permission,jdbcType=VARCHAR},
-      resource_type = #{resourceType,jdbcType=CHAR},
-      url = #{url,jdbcType=VARCHAR}
-    where oid = #{oid,jdbcType=VARCHAR}
-  </update>
+<mapper
+	namespace="com.sjtc.weiwen.system.dao.SysPermissionEntityMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sjtc.weiwen.system.dao.entity.SysPermissionEntity">
+		<id column="oid" property="oid" jdbcType="VARCHAR" />
+		<result column="available" property="available" jdbcType="BIT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="parent_id" property="parentId"
+			jdbcType="BIGINT" />
+		<result column="parent_ids" property="parentIds"
+			jdbcType="VARCHAR" />
+		<result column="permission" property="permission"
+			jdbcType="VARCHAR" />
+		<result column="resource_type" property="resourceType"
+			jdbcType="CHAR" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		oid, available, name, parent_id, parent_ids, permission,
+		resource_type,
+		url
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_sys_permission
+		where oid = #{oid,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		t_sys_permission
+		where oid = #{oid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.sjtc.weiwen.system.dao.entity.SysPermissionEntity">
+		insert into t_sys_permission (oid, available, name,
+		parent_id, parent_ids, permission,
+		resource_type, url)
+		values
+		(#{oid,jdbcType=VARCHAR}, #{available,jdbcType=BIT},
+		#{name,jdbcType=VARCHAR},
+		#{parentId,jdbcType=BIGINT},
+		#{parentIds,jdbcType=VARCHAR}, #{permission,jdbcType=VARCHAR},
+		#{resourceType,jdbcType=CHAR}, #{url,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.sjtc.weiwen.system.dao.entity.SysPermissionEntity">
+		insert into t_sys_permission
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				oid,
+			</if>
+			<if test="available != null">
+				available,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="parentIds != null">
+				parent_ids,
+			</if>
+			<if test="permission != null">
+				permission,
+			</if>
+			<if test="resourceType != null">
+				resource_type,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				#{oid,jdbcType=VARCHAR},
+			</if>
+			<if test="available != null">
+				#{available,jdbcType=BIT},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="parentIds != null">
+				#{parentIds,jdbcType=VARCHAR},
+			</if>
+			<if test="permission != null">
+				#{permission,jdbcType=VARCHAR},
+			</if>
+			<if test="resourceType != null">
+				#{resourceType,jdbcType=CHAR},
+			</if>
+			<if test="url != null">
+				#{url,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.sjtc.weiwen.system.dao.entity.SysPermissionEntity">
+		update t_sys_permission
+		<set>
+			<if test="available != null">
+				available = #{available,jdbcType=BIT},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="parentIds != null">
+				parent_ids = #{parentIds,jdbcType=VARCHAR},
+			</if>
+			<if test="permission != null">
+				permission = #{permission,jdbcType=VARCHAR},
+			</if>
+			<if test="resourceType != null">
+				resource_type = #{resourceType,jdbcType=CHAR},
+			</if>
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.sjtc.weiwen.system.dao.entity.SysPermissionEntity">
+		update t_sys_permission
+		set available =
+		#{available,jdbcType=BIT},
+		name = #{name,jdbcType=VARCHAR},
+		parent_id =
+		#{parentId,jdbcType=BIGINT},
+		parent_ids =
+		#{parentIds,jdbcType=VARCHAR},
+		permission =
+		#{permission,jdbcType=VARCHAR},
+		resource_type =
+		#{resourceType,jdbcType=CHAR},
+		url = #{url,jdbcType=VARCHAR}
+		where oid =
+		#{oid,jdbcType=VARCHAR}
+	</update>
+	<select id="selectPermissionByRole" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT
+		t1.*
+		FROM t_sys_permission t1
+		LEFT JOIN
+		t_sys_role_permission t2
+		ON t1.oid = t2.permission_oid
+		LEFT JOIN
+		t_sys_role t3
+		ON t2.role_oid = t3.oid
+		WHERE t3.oid =
+		#{roleOid,jdbcType=VARCHAR}
+	</select>
+	<select id="selectPermissionByUser" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT *
+		FROM t_sys_permission t
+		WHERE
+		<if test="parentId != null">
+			t.parent_id = #{parentId, jdbcType=VARCHAR}
+		</if>
+		<if test="parentId == null">
+			t.parent_id = 0
+		</if>
+		AND t.oid IN(SELECT
+		t1.permission_oid
+		FROM t_sys_role_permission t1
+		WHERE t1.role_oid IN(SELECT
+		t2.role_oid
+		FROM t_sys_user_role t2
+		WHERE t2.user_oid = #{userOid, jdbcType=VARCHAR}))
+	</select>
 </mapper>

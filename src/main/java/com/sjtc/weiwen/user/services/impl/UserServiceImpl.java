@@ -26,6 +26,7 @@ import com.github.pagehelper.StringUtil;
 import com.sjtc.util.BaseResult;
 import com.sjtc.util.PageInfo;
 import com.sjtc.weiwen.administrative.services.IAdministrativeAreaService;
+import com.sjtc.weiwen.system.services.ISystemService;
 import com.sjtc.weiwen.user.controllers.form.UserVO;
 import com.sjtc.weiwen.user.dao.UserEntityMapper;
 import com.sjtc.weiwen.user.dao.entity.UserEntity;
@@ -38,6 +39,8 @@ public class UserServiceImpl implements IUserService {
 	UserEntityMapper userMapper;
 	@Autowired
 	private IAdministrativeAreaService administrativeAreaService;
+	@Autowired
+	private ISystemService systemService;
 
 	@Override
 	public UserVO getAccount(String name, String pwd) {
@@ -216,6 +219,7 @@ public class UserServiceImpl implements IUserService {
 			vo.setState(entity.getState());
 			vo.setInsertTime(entity.getInsertTime());
 			vo.setUpdateTime(entity.getUpdateTime());
+			vo.setRoles(this.systemService.getRolesByUser(entity.getOid()));
 			return vo;
 		}
 		return null;

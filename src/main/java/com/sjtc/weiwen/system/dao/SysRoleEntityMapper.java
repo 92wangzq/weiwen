@@ -1,5 +1,7 @@
 package com.sjtc.weiwen.system.dao;
 
+import java.util.List;
+
 import com.sjtc.weiwen.system.dao.entity.SysRoleEntity;
 
 public interface SysRoleEntityMapper {
@@ -14,4 +16,6 @@ public interface SysRoleEntityMapper {
     int updateByPrimaryKeySelective(SysRoleEntity record);
 
     int updateByPrimaryKey(SysRoleEntity record);
+
+	List<SysRoleEntity> selectRoleByUser(String userOid);
 }

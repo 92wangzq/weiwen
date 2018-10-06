@@ -2,6 +2,7 @@ package com.sjtc.weiwen.news.controllers;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,7 @@ public class NewsController {
 		return new ResponseEntity<BaseResult>(this.newsService.delete(oid), HttpStatus.OK);
 	}
 	
+	@RequiresPermissions("news:list")
 	@RequestMapping(value="/searchNews", method=RequestMethod.GET)
 	public @ResponseBody ResponseEntity<PageInfo<NewsVO>> searchNews(NewsVO news, @RequestParam(name="limit", required=false)Integer limit, @RequestParam(name="offset", required=false)Integer offset) {
 		if (limit == null || limit == 0) {

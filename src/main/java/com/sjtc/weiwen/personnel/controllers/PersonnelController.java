@@ -2,6 +2,7 @@ package com.sjtc.weiwen.personnel.controllers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class PersonnelController {
 	
 	@RequestMapping(value="/save", method=RequestMethod.POST)
 	public @ResponseBody ResponseEntity<BaseResult> save(PersonnelVO personnel, HttpServletRequest req) {
+		HttpSession session = req.getSession();
+		System.out.println(session.getId());
 		return new ResponseEntity<BaseResult>(this.personnelService.save(personnel, req), HttpStatus.OK);
 	}
 	
@@ -38,6 +41,8 @@ public class PersonnelController {
 	@RequestMapping(value="/searchPersonnels", method=RequestMethod.GET)
 	@RequiresPermissions("personnel:list")
 	public @ResponseBody ResponseEntity<PageInfo<PersonnelVO>> searchPersonnels(PersonnelVO personnel, @RequestParam Integer limit, @RequestParam Integer offset, HttpServletRequest req) {
+		HttpSession session = req.getSession();
+		System.out.println(session.getId());
 		return new ResponseEntity<PageInfo<PersonnelVO>>(this.personnelService.getPersonnels(personnel, limit, offset, req), HttpStatus.OK);
 	}
 	

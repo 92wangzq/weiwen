@@ -1,5 +1,7 @@
 package com.sjtc.weiwen.system.dao;
 
+import java.util.List;
+
 import com.sjtc.weiwen.system.dao.entity.SysPermissionEntity;
 
 public interface SysPermissionEntityMapper {
@@ -14,4 +16,8 @@ public interface SysPermissionEntityMapper {
     int updateByPrimaryKeySelective(SysPermissionEntity record);
 
     int updateByPrimaryKey(SysPermissionEntity record);
+
+	List<SysPermissionEntity> selectPermissionByRole(String roleOid);
+
+	List<SysPermissionEntity> selectPermissionByUser(String userOid, String parentId);
 }

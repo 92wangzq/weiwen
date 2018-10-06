@@ -5,7 +5,6 @@ import java.util.List;
 import com.sjtc.util.PageInfo;
 import com.sjtc.weiwen.system.controllers.form.PermissionVO;
 import com.sjtc.weiwen.system.controllers.form.RoleVO;
-import com.sjtc.weiwen.user.controllers.form.UserVO;
 
 public interface ISystemService {
 
@@ -16,13 +15,20 @@ public interface ISystemService {
 	 * @param user
 	 * @return
 	 */
-	List<RoleVO> getRolesByUser(UserVO user);
+	List<RoleVO> getRolesByUser(String userOid);
 	
 	/**
 	 *  根据角色获取权限
 	 * @param user
 	 * @return
 	 */
-	List<PermissionVO> getPermissionsByRole(RoleVO role);
+	List<PermissionVO> getPermissionsByRole(String roleOid);
+
+	/**
+	 * 获取资源
+	 * @param oid
+	 * @return
+	 */
+	List<PermissionVO> getMenus(String userOid, String parentId);
 
 }

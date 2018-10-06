@@ -11,6 +11,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.sjtc.weiwen.system.controllers.form.PermissionVO;
@@ -31,8 +32,10 @@ public class MyShiroRealm extends AuthorizingRealm {
 		UserVO user = JSON.parseObject(string, UserVO.class);
 		for (RoleVO role : user.getRoles()) {
 			authorizationInfo.addRole(role.getRole());
-			for (PermissionVO permission : role.getPermissions()) {
-				authorizationInfo.addStringPermission(permission.getPermission());
+			if (!CollectionUtils.isEmpty(role.getPermissions())) {
+				for (PermissionVO permission : role.getPermissions()) {
+					authorizationInfo.addStringPermission(permission.getPermission());
+				}
 			}
 		}
 		return authorizationInfo;

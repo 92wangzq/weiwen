@@ -1,6 +1,7 @@
 package com.sjtc.weiwen.system.controllers.form;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,4 +36,6 @@ public class PermissionVO implements Serializable {
     private String resourceType;
 
     private String url;
+    
+    private List<PermissionVO> permissions;
 }
