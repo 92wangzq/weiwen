@@ -3,6 +3,8 @@ package com.sjtc.weiwen.administrative.controllers.form;
 import java.io.Serializable;
 import java.util.List;
 
+import com.sjtc.weiwen.user.controllers.form.UserVO;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,4 +34,6 @@ public class AdministrativeAreaVO implements Serializable {
     private String text;
     
     private List<AdministrativeAreaVO> nodes;
+    
+    private List<UserVO> users;
 }

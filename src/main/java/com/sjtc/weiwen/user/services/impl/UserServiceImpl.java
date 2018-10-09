@@ -19,6 +19,8 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -147,6 +149,7 @@ public class UserServiceImpl implements IUserService {
 				vo.setUserPwd(entity.getUserPwd());
 				vo.setUserTypeOid(entity.getUserTypeOid());
 				vo.setAreaOid(entity.getAreaOid());
+				vo.setArea(this.administrativeAreaService.getArea(entity.getAreaOid()));
 				vo.setInsertTime(entity.getInsertTime());
 				vo.setUpdateTime(entity.getUpdateTime());
 				vos.add(vo);
@@ -221,6 +224,33 @@ public class UserServiceImpl implements IUserService {
 			vo.setUpdateTime(entity.getUpdateTime());
 			vo.setRoles(this.systemService.getRolesByUser(entity.getOid()));
 			return vo;
+		}
+		return null;
+	}
+
+	@Override
+	public List<UserVO> getUserByArea(String areaOid) {
+		if (!StringUtils.isEmpty(areaOid)) {
+			List<UserEntity> list = this.userMapper.selectUsersByArea(areaOid);
+			if (!CollectionUtils.isEmpty(list)) {
+				List<UserVO> vos = new ArrayList<>();
+				for (UserEntity entity : list) {
+					UserVO vo = new UserVO();
+					vo.setOid(entity.getOid());
+					vo.setRealName(entity.getRealName());
+					vo.setUserName(entity.getUserName());
+					vo.setUserPwd(entity.getUserPwd());
+					vo.setSalt(entity.getSalt());
+					vo.setState(entity.getState());
+					vo.setInsertTime(entity.getInsertTime());
+					vo.setUpdateTime(entity.getUpdateTime());
+					vo.setRoles(this.systemService.getRolesByUser(entity.getOid()));
+					vos.add(vo);
+				}
+				return vos;
+			}
+		} else {
+			throw new IllegalArgumentException();
 		}
 		return null;
 	}

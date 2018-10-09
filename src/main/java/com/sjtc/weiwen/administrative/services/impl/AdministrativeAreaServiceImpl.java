@@ -17,12 +17,15 @@ import com.sjtc.weiwen.administrative.controllers.form.AdministrativeAreaVO;
 import com.sjtc.weiwen.administrative.dao.AdministrativeAreaEntityMapper;
 import com.sjtc.weiwen.administrative.dao.entity.AdministrativeAreaEntity;
 import com.sjtc.weiwen.administrative.services.IAdministrativeAreaService;
+import com.sjtc.weiwen.user.services.IUserService;
 
 @Service
 public class AdministrativeAreaServiceImpl implements IAdministrativeAreaService {
 
 	@Autowired
 	private AdministrativeAreaEntityMapper administrativeAreaMapper;
+	@Autowired
+	private IUserService userService;
 	
 	
 	@Transactional
@@ -64,6 +67,7 @@ public class AdministrativeAreaServiceImpl implements IAdministrativeAreaService
 				areaVO.setOid(entity.getOid());
 				areaVO.setTitle(entity.getTitle());
 				areaVO.setPOid(entity.getPOid());
+				areaVO.setUsers(this.userService.getUserByArea(entity.getOid()));
 				vos.add(areaVO);
 			}
 			PageInfo<AdministrativeAreaVO> pageInfo = new PageInfo<>();

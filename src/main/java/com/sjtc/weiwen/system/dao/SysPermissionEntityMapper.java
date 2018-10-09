@@ -20,4 +20,6 @@ public interface SysPermissionEntityMapper {
 	List<SysPermissionEntity> selectPermissionByRole(String roleOid);
 
 	List<SysPermissionEntity> selectPermissionByUser(String userOid, String parentId);
+
+	List<SysPermissionEntity> selectPermissionsByFuzz(SysPermissionEntity params);
 }

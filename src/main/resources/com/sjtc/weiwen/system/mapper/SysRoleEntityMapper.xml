@@ -21,7 +21,8 @@
 		where oid = #{oid,jdbcType=VARCHAR}
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-		delete from t_sys_role
+		delete from
+		t_sys_role
 		where oid = #{oid,jdbcType=VARCHAR}
 	</delete>
 	<insert id="insert"
@@ -83,19 +84,32 @@
 	<update id="updateByPrimaryKey"
 		parameterType="com.sjtc.weiwen.system.dao.entity.SysRoleEntity">
 		update t_sys_role
-		set available = #{available,jdbcType=BIT},
-		description = #{description,jdbcType=VARCHAR},
+		set available =
+		#{available,jdbcType=BIT},
+		description =
+		#{description,jdbcType=VARCHAR},
 		role = #{role,jdbcType=VARCHAR}
-		where oid = #{oid,jdbcType=VARCHAR}
+		where
+		oid = #{oid,jdbcType=VARCHAR}
 	</update>
-	<select id="selectRoleByUser" resultMap="BaseResultMap" parameterType="java.lang.String">
+	<select id="selectRoleByUser" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
 		SELECT
-		  t1.*
+		t1.*
 		FROM t_sys_role t1
-		  LEFT JOIN t_sys_user_role t2
-		    ON t1.oid = t2.role_oid
-		  LEFT JOIN t_user t3
-		    ON t2.user_oid = t3.oid
+		LEFT JOIN t_sys_user_role t2
+		ON t1.oid = t2.role_oid
+		LEFT JOIN t_user t3
+		ON t2.user_oid = t3.oid
 		WHERE t3.oid = #{userOid,jdbcType=VARCHAR}
+	</select>
+	<select id="selectRoles" resultMap="BaseResultMap" parameterType="map">
+		select <include refid="Base_Column_List" />
+		from t_sys_role
+		<where>
+			<if test="role != null and role != ''">
+				role = #{role, jdbcType=VARCHAR}
+			</if>
+		</where>
 	</select>
 </mapper>

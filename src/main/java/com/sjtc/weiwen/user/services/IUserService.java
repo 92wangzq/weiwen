@@ -1,5 +1,7 @@
  package com.sjtc.weiwen.user.services;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,4 +24,11 @@ public interface IUserService {
 	public UserVO getUser(String oid);
 
 	public UserVO getUserByAccount(String account);
+
+	/**
+	 * 根据行政区域查询用户
+	 * @param areaOid
+	 * @return
+	 */
+	public List<UserVO> getUserByArea(String areaOid);
 }

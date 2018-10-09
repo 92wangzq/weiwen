@@ -31,4 +31,12 @@ public interface ISystemService {
 	 */
 	List<PermissionVO> getMenus(String userOid, String parentId);
 
+	/**
+	 * 获取角色列表
+	 * @param limit
+	 * @param offset
+	 * @return
+	 */
+	PageInfo<RoleVO> getRoles(RoleVO vo, Integer limit, Integer offset);
+
 }

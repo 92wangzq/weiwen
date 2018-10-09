@@ -18,4 +18,6 @@ public interface SysRoleEntityMapper {
     int updateByPrimaryKey(SysRoleEntity record);
 
 	List<SysRoleEntity> selectRoleByUser(String userOid);
+
+	List<SysRoleEntity> selectRoles(SysRoleEntity params);
 }

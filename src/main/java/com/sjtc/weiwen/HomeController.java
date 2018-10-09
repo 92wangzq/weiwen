@@ -3,7 +3,6 @@ package com.sjtc.weiwen;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -80,8 +79,6 @@ public class HomeController {
 		if (SecurityUtils.getSubject().getPrincipal() != null) {
 			SecurityUtils.getSubject().logout();
 		}
-//		HttpSession session = req.getSession();
-//		session.removeAttribute("user");
 		Cookie userName = new Cookie("userName", null);
 		userName.setMaxAge(0);
 		userName.setPath("/");

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 import com.sjtc.util.PageInfo;
 import com.sjtc.weiwen.system.controllers.form.PermissionVO;
+import com.sjtc.weiwen.system.controllers.form.RoleVO;
 import com.sjtc.weiwen.system.services.ISystemService;
 import com.sjtc.weiwen.user.controllers.form.UserVO;
 
@@ -33,6 +34,12 @@ public class SystemController {
 		return new ResponseEntity<PageInfo<PermissionVO>>(this.systemService.getPermissions(vo, limit, offset), HttpStatus.OK);
 	}
 	
+	@RequestMapping(value="/roleList", method = {RequestMethod.GET, RequestMethod.POST})
+	@ResponseBody
+	public ResponseEntity<PageInfo<RoleVO>> roleList(RoleVO vo, @RequestParam(value="limit", required = false)Integer limit, @RequestParam(value="offset", required = false)Integer offset) {
+		return new ResponseEntity<PageInfo<RoleVO>>(this.systemService.getRoles(vo, limit, offset), HttpStatus.OK);
+	}
+	
 	
 	@RequestMapping(value = "/menus", method = {RequestMethod.POST, RequestMethod.GET})
 	@ResponseBody
@@ -43,4 +50,6 @@ public class SystemController {
 		
 		return new ResponseEntity<List<PermissionVO>>(this.systemService.getMenus(user.getOid(), null), HttpStatus.OK);
 	}
+	
+	
 }

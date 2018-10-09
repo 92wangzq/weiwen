@@ -21,4 +21,6 @@ public interface UserEntityMapper {
 	List<UserEntity> selectUsersByFuzz(UserVO user);
 
 	UserEntity selectByUserName(String loginName);
+
+	List<UserEntity> selectUsersByArea(String areaOid);
 }

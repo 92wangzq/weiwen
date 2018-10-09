@@ -179,6 +179,21 @@
 		WHERE t1.role_oid IN(SELECT
 		t2.role_oid
 		FROM t_sys_user_role t2
-		WHERE t2.user_oid = #{userOid, jdbcType=VARCHAR}))
+		WHERE
+		t2.user_oid = #{userOid, jdbcType=VARCHAR}))
+	</select>
+	<select id="selectPermissionsByFuzz" resultMap="BaseResultMap" parameterType="map">
+		select <include refid="Base_Column_List" />
+		from t_sys_permission
+		<where>
+			1=1
+			<if test="name != null and name != ''">
+				and name like "%"#{name,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="resourceType != null and resourceType != ''">
+				and resource_type = #{resourceType,jdbcType=CHAR}
+			</if>
+		</where>
+		order by oid asc
 	</select>
 </mapper>

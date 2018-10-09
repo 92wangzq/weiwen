@@ -63,8 +63,8 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/searchUsers", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody ResponseEntity<PageInfo<UserVO>> searchUsers(UserVO user, @RequestParam Integer limit,
-			@RequestParam Integer offset) {
+	public @ResponseBody ResponseEntity<PageInfo<UserVO>> searchUsers(UserVO user, @RequestParam(value="limit", required = false) Integer limit,
+			@RequestParam(value = "offset", required = false) Integer offset) {
 		return new ResponseEntity<PageInfo<UserVO>>(this.userService.getUsers(user, limit, offset), HttpStatus.OK);
 	}
 }
