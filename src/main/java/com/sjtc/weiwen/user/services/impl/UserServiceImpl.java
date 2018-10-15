@@ -58,7 +58,7 @@ public class UserServiceImpl implements IUserService {
 			entity.setOid(UUID.randomUUID().toString().replaceAll("-", ""));
 			entity.setRealName(user.getRealName());
 			entity.setUserName(user.getUserName());
-			entity.setUserPwd(new SimpleHash("md5", user.getUserPwd(), entity.getCredentialsSalt(), 1024).toString());
+			entity.setUserPwd(new SimpleHash("md5", user.getUserPwd(), entity.getCredentialsSalt(), 2).toString());
 			entity.setUserTypeOid(user.getUserTypeOid());
 			entity.setAreaOid(user.getAreaOid());
 			entity.setInsertTime(new Date());

@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.sjtc.weiwen.lawrelated.dao.LawRelatedEntityMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sjtc.weiwen.lawrelated.dao.entity.LawRelatedEntity">
+		<id column="oid" property="oid" jdbcType="VARCHAR" />
+		<result column="real_name" property="realName"
+			jdbcType="VARCHAR" />
+		<result column="nation" property="nation" jdbcType="VARCHAR" />
+		<result column="identity_card" property="identityCard"
+			jdbcType="VARCHAR" />
+		<result column="birthday" property="birthday" jdbcType="DATE" />
+		<result column="political_status" property="politicalStatus"
+			jdbcType="VARCHAR" />
+		<result column="work_unit" property="workUnit"
+			jdbcType="VARCHAR" />
+		<result column="present" property="present" jdbcType="VARCHAR" />
+		<result column="domicile" property="domicile"
+			jdbcType="VARCHAR" />
+		<result column="telephone" property="telephone"
+			jdbcType="VARCHAR" />
+		<result column="appeals" property="appeals" jdbcType="VARCHAR" />
+		<result column="original_real_name" property="originalRealName"
+			jdbcType="VARCHAR" />
+		<result column="original_nation" property="originalNation"
+			jdbcType="VARCHAR" />
+		<result column="original_identity_card"
+			property="originalIdentityCard" jdbcType="VARCHAR" />
+		<result column="original_birthday" property="originalBirthday"
+			jdbcType="DATE" />
+		<result column="original_political_status"
+			property="originalPoliticalStatus" jdbcType="VARCHAR" />
+		<result column="original_work_unit" property="originalWorkUnit"
+			jdbcType="VARCHAR" />
+		<result column="original_present" property="originalPresent"
+			jdbcType="VARCHAR" />
+		<result column="original_domicile" property="originalDomicile"
+			jdbcType="VARCHAR" />
+		<result column="original_telephone"
+			property="originalTelephone" jdbcType="VARCHAR" />
+		<result column="original_appeals" property="originalAppeals"
+			jdbcType="VARCHAR" />
+		<result column="case_type" property="caseType"
+			jdbcType="VARCHAR" />
+		<result column="letter_visit_order" property="letterVisitOrder"
+			jdbcType="VARCHAR" />
+		<result column="power_affairs_unit" property="powerAffairsUnit"
+			jdbcType="VARCHAR" />
+		<result column="attend_to" property="attendTo"
+			jdbcType="VARCHAR" />
+		<result column="insert_time" property="insertTime"
+			jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap type="com.sjtc.weiwen.lawrelated.dao.entity.LawRelatedEntity" id="GroupByCaseTypeResultMap" extends="BaseResultMap">
+		<result column="label" property="label"
+			jdbcType="VARCHAR" />
+		<result column="val" property="val"
+			jdbcType="FLOAT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		oid, real_name, nation, identity_card, birthday,
+		political_status,
+		work_unit, present,
+		domicile, telephone, appeals,
+		original_real_name, original_nation,
+		original_identity_card,
+		original_birthday, original_political_status, original_work_unit,
+		original_present,
+		original_domicile, original_telephone,
+		original_appeals, case_type,
+		letter_visit_order,
+		power_affairs_unit,
+		attend_to, insert_time, update_time
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_law_related
+		where oid = #{oid,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		t_law_related
+		where oid = #{oid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.sjtc.weiwen.lawrelated.dao.entity.LawRelatedEntity">
+		insert into t_law_related (oid, real_name, nation,
+		identity_card, birthday, political_status,
+		work_unit, present,
+		domicile,
+		telephone, appeals, original_real_name,
+		original_nation,
+		original_identity_card, original_birthday,
+		original_political_status,
+		original_work_unit,
+		original_present, original_domicile,
+		original_telephone,
+		original_appeals, case_type, letter_visit_order,
+		power_affairs_unit, attend_to, insert_time,
+		update_time)
+		values
+		(#{oid,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR},
+		#{nation,jdbcType=VARCHAR},
+		#{identityCard,jdbcType=VARCHAR},
+		#{birthday,jdbcType=DATE}, #{politicalStatus,jdbcType=VARCHAR},
+		#{workUnit,jdbcType=VARCHAR}, #{present,jdbcType=VARCHAR},
+		#{domicile,jdbcType=VARCHAR},
+		#{telephone,jdbcType=VARCHAR},
+		#{appeals,jdbcType=VARCHAR}, #{originalRealName,jdbcType=VARCHAR},
+		#{originalNation,jdbcType=VARCHAR},
+		#{originalIdentityCard,jdbcType=VARCHAR},
+		#{originalBirthday,jdbcType=DATE},
+		#{originalPoliticalStatus,jdbcType=VARCHAR},
+		#{originalWorkUnit,jdbcType=VARCHAR},
+		#{originalPresent,jdbcType=VARCHAR},
+		#{originalDomicile,jdbcType=VARCHAR},
+		#{originalTelephone,jdbcType=VARCHAR},
+		#{originalAppeals,jdbcType=VARCHAR}, #{caseType,jdbcType=VARCHAR},
+		#{letterVisitOrder,jdbcType=VARCHAR},
+		#{powerAffairsUnit,jdbcType=VARCHAR}, #{attendTo,jdbcType=VARCHAR},
+		#{insertTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.sjtc.weiwen.lawrelated.dao.entity.LawRelatedEntity">
+		insert into t_law_related
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				oid,
+			</if>
+			<if test="realName != null">
+				real_name,
+			</if>
+			<if test="nation != null">
+				nation,
+			</if>
+			<if test="identityCard != null">
+				identity_card,
+			</if>
+			<if test="birthday != null">
+				birthday,
+			</if>
+			<if test="politicalStatus != null">
+				political_status,
+			</if>
+			<if test="workUnit != null">
+				work_unit,
+			</if>
+			<if test="present != null">
+				present,
+			</if>
+			<if test="domicile != null">
+				domicile,
+			</if>
+			<if test="telephone != null">
+				telephone,
+			</if>
+			<if test="appeals != null">
+				appeals,
+			</if>
+			<if test="originalRealName != null">
+				original_real_name,
+			</if>
+			<if test="originalNation != null">
+				original_nation,
+			</if>
+			<if test="originalIdentityCard != null">
+				original_identity_card,
+			</if>
+			<if test="originalBirthday != null">
+				original_birthday,
+			</if>
+			<if test="originalPoliticalStatus != null">
+				original_political_status,
+			</if>
+			<if test="originalWorkUnit != null">
+				original_work_unit,
+			</if>
+			<if test="originalPresent != null">
+				original_present,
+			</if>
+			<if test="originalDomicile != null">
+				original_domicile,
+			</if>
+			<if test="originalTelephone != null">
+				original_telephone,
+			</if>
+			<if test="originalAppeals != null">
+				original_appeals,
+			</if>
+			<if test="caseType != null">
+				case_type,
+			</if>
+			<if test="letterVisitOrder != null">
+				letter_visit_order,
+			</if>
+			<if test="powerAffairsUnit != null">
+				power_affairs_unit,
+			</if>
+			<if test="attendTo != null">
+				attend_to,
+			</if>
+			<if test="insertTime != null">
+				insert_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				#{oid,jdbcType=VARCHAR},
+			</if>
+			<if test="realName != null">
+				#{realName,jdbcType=VARCHAR},
+			</if>
+			<if test="nation != null">
+				#{nation,jdbcType=VARCHAR},
+			</if>
+			<if test="identityCard != null">
+				#{identityCard,jdbcType=VARCHAR},
+			</if>
+			<if test="birthday != null">
+				#{birthday,jdbcType=DATE},
+			</if>
+			<if test="politicalStatus != null">
+				#{politicalStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="workUnit != null">
+				#{workUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="present != null">
+				#{present,jdbcType=VARCHAR},
+			</if>
+			<if test="domicile != null">
+				#{domicile,jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null">
+				#{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="appeals != null">
+				#{appeals,jdbcType=VARCHAR},
+			</if>
+			<if test="originalRealName != null">
+				#{originalRealName,jdbcType=VARCHAR},
+			</if>
+			<if test="originalNation != null">
+				#{originalNation,jdbcType=VARCHAR},
+			</if>
+			<if test="originalIdentityCard != null">
+				#{originalIdentityCard,jdbcType=VARCHAR},
+			</if>
+			<if test="originalBirthday != null">
+				#{originalBirthday,jdbcType=DATE},
+			</if>
+			<if test="originalPoliticalStatus != null">
+				#{originalPoliticalStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="originalWorkUnit != null">
+				#{originalWorkUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="originalPresent != null">
+				#{originalPresent,jdbcType=VARCHAR},
+			</if>
+			<if test="originalDomicile != null">
+				#{originalDomicile,jdbcType=VARCHAR},
+			</if>
+			<if test="originalTelephone != null">
+				#{originalTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="originalAppeals != null">
+				#{originalAppeals,jdbcType=VARCHAR},
+			</if>
+			<if test="caseType != null">
+				#{caseType,jdbcType=VARCHAR},
+			</if>
+			<if test="letterVisitOrder != null">
+				#{letterVisitOrder,jdbcType=VARCHAR},
+			</if>
+			<if test="powerAffairsUnit != null">
+				#{powerAffairsUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="attendTo != null">
+				#{attendTo,jdbcType=VARCHAR},
+			</if>
+			<if test="insertTime != null">
+				#{insertTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.sjtc.weiwen.lawrelated.dao.entity.LawRelatedEntity">
+		update t_law_related
+		<set>
+			<if test="realName != null">
+				real_name = #{realName,jdbcType=VARCHAR},
+			</if>
+			<if test="nation != null">
+				nation = #{nation,jdbcType=VARCHAR},
+			</if>
+			<if test="identityCard != null">
+				identity_card = #{identityCard,jdbcType=VARCHAR},
+			</if>
+			<if test="birthday != null">
+				birthday = #{birthday,jdbcType=DATE},
+			</if>
+			<if test="politicalStatus != null">
+				political_status = #{politicalStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="workUnit != null">
+				work_unit = #{workUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="present != null">
+				present = #{present,jdbcType=VARCHAR},
+			</if>
+			<if test="domicile != null">
+				domicile = #{domicile,jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null">
+				telephone = #{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="appeals != null">
+				appeals = #{appeals,jdbcType=VARCHAR},
+			</if>
+			<if test="originalRealName != null">
+				original_real_name =
+				#{originalRealName,jdbcType=VARCHAR},
+			</if>
+			<if test="originalNation != null">
+				original_nation = #{originalNation,jdbcType=VARCHAR},
+			</if>
+			<if test="originalIdentityCard != null">
+				original_identity_card =
+				#{originalIdentityCard,jdbcType=VARCHAR},
+			</if>
+			<if test="originalBirthday != null">
+				original_birthday = #{originalBirthday,jdbcType=DATE},
+			</if>
+			<if test="originalPoliticalStatus != null">
+				original_political_status =
+				#{originalPoliticalStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="originalWorkUnit != null">
+				original_work_unit =
+				#{originalWorkUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="originalPresent != null">
+				original_present = #{originalPresent,jdbcType=VARCHAR},
+			</if>
+			<if test="originalDomicile != null">
+				original_domicile = #{originalDomicile,jdbcType=VARCHAR},
+			</if>
+			<if test="originalTelephone != null">
+				original_telephone =
+				#{originalTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="originalAppeals != null">
+				original_appeals = #{originalAppeals,jdbcType=VARCHAR},
+			</if>
+			<if test="caseType != null">
+				case_type = #{caseType,jdbcType=VARCHAR},
+			</if>
+			<if test="letterVisitOrder != null">
+				letter_visit_order =
+				#{letterVisitOrder,jdbcType=VARCHAR},
+			</if>
+			<if test="powerAffairsUnit != null">
+				power_affairs_unit =
+				#{powerAffairsUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="attendTo != null">
+				attend_to = #{attendTo,jdbcType=VARCHAR},
+			</if>
+			<if test="insertTime != null">
+				insert_time = #{insertTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.sjtc.weiwen.lawrelated.dao.entity.LawRelatedEntity">
+		update t_law_related
+		set real_name =
+		#{realName,jdbcType=VARCHAR},
+		nation = #{nation,jdbcType=VARCHAR},
+		identity_card = #{identityCard,jdbcType=VARCHAR},
+		birthday =
+		#{birthday,jdbcType=DATE},
+		political_status =
+		#{politicalStatus,jdbcType=VARCHAR},
+		work_unit =
+		#{workUnit,jdbcType=VARCHAR},
+		present = #{present,jdbcType=VARCHAR},
+		domicile = #{domicile,jdbcType=VARCHAR},
+		telephone =
+		#{telephone,jdbcType=VARCHAR},
+		appeals = #{appeals,jdbcType=VARCHAR},
+		original_real_name = #{originalRealName,jdbcType=VARCHAR},
+		original_nation = #{originalNation,jdbcType=VARCHAR},
+		original_identity_card = #{originalIdentityCard,jdbcType=VARCHAR},
+		original_birthday = #{originalBirthday,jdbcType=DATE},
+		original_political_status =
+		#{originalPoliticalStatus,jdbcType=VARCHAR},
+		original_work_unit =
+		#{originalWorkUnit,jdbcType=VARCHAR},
+		original_present =
+		#{originalPresent,jdbcType=VARCHAR},
+		original_domicile =
+		#{originalDomicile,jdbcType=VARCHAR},
+		original_telephone =
+		#{originalTelephone,jdbcType=VARCHAR},
+		original_appeals =
+		#{originalAppeals,jdbcType=VARCHAR},
+		case_type =
+		#{caseType,jdbcType=VARCHAR},
+		letter_visit_order =
+		#{letterVisitOrder,jdbcType=VARCHAR},
+		power_affairs_unit =
+		#{powerAffairsUnit,jdbcType=VARCHAR},
+		attend_to =
+		#{attendTo,jdbcType=VARCHAR},
+		insert_time =
+		#{insertTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP}
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<select id="selectLawRelatedsByFuzz" resultMap="BaseResultMap"
+		parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from t_law_related
+		<where>
+			1=1
+			<if test="realName != null and realName != ''">
+				and real_name like "%"#{realName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="nation != null and nation != ''">
+				and nation = #{nation,jdbcType=VARCHAR}
+			</if>
+			<if test="identityCard != null and identityCard != ''">
+				and identity_card = #{identityCard,jdbcType=VARCHAR}
+			</if>
+			<if test="birthday != null">
+				and birthday = #{birthday,jdbcType=DATE}
+			</if>
+			<if test="originalRealName != null and originalRealName != ''">
+				and original_real_name like
+				"%"#{originalRealName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="originalNation != null and originalNation != ''">
+				and original_nation = #{originalNation,jdbcType=VARCHAR}
+			</if>
+			<if
+				test="originalIdentityCard != null and originalIdentityCard != ''">
+				and original_identity_card =
+				#{originalIdentityCard,jdbcType=VARCHAR}
+			</if>
+			<if test="originalBirthday != null">
+				and original_birthday = #{originalBirthday,jdbcType=DATE}
+			</if>
+		</where>
+		order by insert_time desc
+	</select>
+	<select id="selectCountByCaseType"
+		resultType="java.lang.Integer" parameterType="map">
+		select count(0) from
+		t_law_related where case_type = #{caseType, jdbcType=VARCHAR} AND
+		YEAR(insert_time) = #{year, jdbcType=INTEGER} AND MONTH(insert_time) =
+		#{month, jdbcType=INTEGER}
+	</select>
+	<select id="selectPercentageGroupByCaseType" resultMap="GroupByCaseTypeResultMap">
+		SELECT case_type label, COUNT(0)/(SELECT COUNT(0) FROM t_law_related)*100 val FROM t_law_related GROUP BY case_type
+	</select>
+</mapper>

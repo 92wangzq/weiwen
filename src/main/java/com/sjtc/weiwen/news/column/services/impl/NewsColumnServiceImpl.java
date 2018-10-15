@@ -36,13 +36,13 @@ public class NewsColumnServiceImpl implements INewsColumnService {
 		if (StringUtil.isEmpty(newsColumn.getOid())) {
 			entity.setOid(UUID.randomUUID().toString().replaceAll("-", ""));
 			entity.setTitle(newsColumn.getTitle());
-			entity.setpOid(newsColumn.getPOid());
+			entity.setPOid(newsColumn.getPOid());
 			entity.setUserOid(req.getSession().getAttribute("user").toString());
 			this.newsColumnMapper.insert(entity);
 		} else {
 			entity.setOid(newsColumn.getOid());
 			entity.setTitle(newsColumn.getTitle());
-			entity.setpOid(newsColumn.getPOid());
+			entity.setPOid(newsColumn.getPOid());
 			this.newsColumnMapper.updateByPrimaryKeySelective(entity);
 		}
 		return new BaseResult();
@@ -60,7 +60,7 @@ public class NewsColumnServiceImpl implements INewsColumnService {
 		NewsColumnEntity params = new NewsColumnEntity();
 		params.setOid(newsColumn.getOid());
 		params.setTitle(newsColumn.getTitle());
-		params.setpOid(newsColumn.getPOid());
+		params.setPOid(newsColumn.getPOid());
 		Page<NewsColumnEntity> page = PageHelper.startPage(offset, limit, true);
 		List<NewsColumnEntity> list = this.newsColumnMapper.selectNewsColumnsByFuzz(params);
 		if (list != null && list.size() > 0) {
@@ -68,7 +68,7 @@ public class NewsColumnServiceImpl implements INewsColumnService {
 			for (NewsColumnEntity entity : list) {
 				NewsColumnVO vo = new NewsColumnVO();
 				vo.setOid(entity.getOid());
-				vo.setPOid(entity.getpOid());
+				vo.setPOid(entity.getPOid());
 				vo.setTitle(entity.getTitle());
 				vo.setUser(this.userService.getUser(entity.getUserOid()));
 				vos.add(vo);
@@ -93,7 +93,7 @@ public class NewsColumnServiceImpl implements INewsColumnService {
 				NewsColumnVO vo = new NewsColumnVO();
 				vo.setOid(entity.getOid());
 				vo.setTitle(entity.getTitle());
-				vo.setPOid(entity.getpOid());
+				vo.setPOid(entity.getPOid());
 				vo.setUser(this.userService.getUser(entity.getUserOid()));
 				vo.setText(entity.getTitle());
 				vo.setNodes(this.getChildrens(entity.getOid()));
@@ -111,7 +111,7 @@ public class NewsColumnServiceImpl implements INewsColumnService {
 			NewsColumnVO vo = new NewsColumnVO();
 			vo.setOid(entity.getOid());
 			vo.setTitle(entity.getTitle());
-			vo.setPOid(entity.getpOid());
+			vo.setPOid(entity.getPOid());
 			vo.setUser(this.userService.getUser(entity.getUserOid()));
 			return vo;
 		}

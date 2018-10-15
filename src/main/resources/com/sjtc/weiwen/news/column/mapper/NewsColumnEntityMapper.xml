@@ -8,9 +8,10 @@
 		<result column="title" property="title" jdbcType="VARCHAR" />
 		<result column="p_oid" property="pOid" jdbcType="VARCHAR" />
 		<result column="user_oid" property="userOid" jdbcType="VARCHAR" />
+		<result column="area_oid" property="areaOid" jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		oid, title, p_oid, user_oid
+		oid, title, p_oid, user_oid, area_oid
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
@@ -26,10 +27,10 @@
 	<insert id="insert"
 		parameterType="com.sjtc.weiwen.news.column.dao.entity.NewsColumnEntity">
 		insert into t_news_column (oid, title, p_oid,
-		user_oid)
+		user_oid, area_oid)
 		values (#{oid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
 		#{pOid,jdbcType=VARCHAR},
-		#{userOid,jdbcType=VARCHAR})
+		#{userOid,jdbcType=VARCHAR}, #{areaOid,jdbcType=VARCHAR})
 	</insert>
 	<insert id="insertSelective"
 		parameterType="com.sjtc.weiwen.news.column.dao.entity.NewsColumnEntity">
@@ -47,6 +48,9 @@
 			<if test="userOid != null">
 				user_oid,
 			</if>
+			<if test="areaOid != null">
+				area_oid,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="oid != null">
@@ -60,6 +64,9 @@
 			</if>
 			<if test="userOid != null">
 				#{userOid,jdbcType=VARCHAR},
+			</if>
+			<if test="areaOid != null">
+				#{areaOid, jdbcType=VARCHAR},
 			</if>
 		</trim>
 	</insert>
@@ -76,6 +83,9 @@
 			<if test="userOid != null">
 				user_oid = #{userOid,jdbcType=VARCHAR},
 			</if>
+			<if test="areaOid != null">
+				area_oid = #{areaOid, jdbcType=VARCHAR},
+			</if>
 		</set>
 		where oid = #{oid,jdbcType=VARCHAR}
 	</update>
@@ -84,7 +94,8 @@
 		update t_news_column
 		set title = #{title,jdbcType=VARCHAR},
 		p_oid = #{pOid,jdbcType=VARCHAR},
-		user_oid = #{userOid,jdbcType=VARCHAR}
+		user_oid = #{userOid,jdbcType=VARCHAR},
+		area_oid = #{areaOid,jdbcType=VARCHAR},
 		where oid = #{oid,jdbcType=VARCHAR}
 	</update>
 	<select id="selectNewsColumnsByFuzz" resultMap="BaseResultMap" parameterType="map">
@@ -94,13 +105,16 @@
 		<where>
 			1=1
 			<if test="title != null and title != ''">
-				and title like '%#{title,jdbcType=VARCHAR}%',
+				and title like '%#{title,jdbcType=VARCHAR}%'
 			</if>
 			<if test="pOid != null and title != ''">
-				and p_oid = #{pOid,jdbcType=VARCHAR},
+				and p_oid = #{pOid,jdbcType=VARCHAR}
 			</if>
 			<if test="userOid != null and title != ''">
-				and user_oid = #{userOid,jdbcType=VARCHAR},
+				and user_oid = #{userOid,jdbcType=VARCHAR}
+			</if>
+			<if test="areaOid != null and areaOid != ''">
+				and area_oid = #{areaOid,jdbcType=VARCHAR}
 			</if>
 		</where>
 	</select>
