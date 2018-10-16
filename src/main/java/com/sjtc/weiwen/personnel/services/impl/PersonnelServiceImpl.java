@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -21,7 +22,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.StringUtil;
 import com.sjtc.util.BaseResult;
 import com.sjtc.util.PageInfo;
-import com.sjtc.weiwen.administrative.controllers.form.AdministrativeAreaVO;
 import com.sjtc.weiwen.administrative.services.IAdministrativeAreaService;
 import com.sjtc.weiwen.personnel.controllers.form.PersonnelVO;
 import com.sjtc.weiwen.personnel.dao.PersonnelEntityMapper;
@@ -124,29 +124,23 @@ public class PersonnelServiceImpl implements IPersonnelService {
 
 	@Override
 	public PageInfo<PersonnelVO> getPersonnels(PersonnelVO personnel, Integer limit, Integer offset, HttpServletRequest req) {
-		
 		UserVO user = this.userService.getUser(req.getSession().getAttribute("user").toString());
-//		UserVO user = (UserVO)req.getSession().getAttribute("user");
 		if (user == null) {
 			throw new IllegalArgumentException();
 		}
-		List<String> areaOidList = new ArrayList<>();
+		PersonnelEntity params = new PersonnelEntity();
+		List<String> areaOids = new ArrayList<>();
 		if (personnel.getArea() != null) {
-			List<AdministrativeAreaVO> areas = this.administrativeAreaService.getAreaParent(user.getArea().getOid());
-			
-			for (AdministrativeAreaVO area : areas) {
-				areaOids = area.getOid();
-				areaOids = this.getAreaOids(area.getNodes(), areaOids);
+			areaOids = this.administrativeAreaService.getChildOids(personnel.getArea().getOid());
+			if (!CollectionUtils.isEmpty(areaOids)) {
+				params.setAreaOids(areaOids);
 			}
-			
-			for (String str : areaOids.split(",")) {
-				areaOidList.add(str);
+		} else {
+			areaOids = this.administrativeAreaService.getChildOids(user.getArea().getOid());
+			if (!CollectionUtils.isEmpty(areaOids)) {
+				params.setAreaOids(areaOids);
 			}
 		}
-		PersonnelEntity params = new PersonnelEntity();
-		params.setAreaOids(areaOidList);
-		params.setOid(personnel.getOid());
-		params.setAreaOid(personnel.getArea().getOid());
 		params.setPersonnelTypeOid(personnel.getType() != null ? personnel.getType().getOid() : null);
 		params.setRealName(personnel.getRealName());
 		params.setSex(personnel.getSex());
@@ -201,18 +195,6 @@ public class PersonnelServiceImpl implements IPersonnelService {
 			return pageInfo;
 		}
 		return null;
-	}
-
-	private String getAreaOids(List<AdministrativeAreaVO> areas, String oids) {
-		if (areas != null && areas.size() > 0) {
-			for (AdministrativeAreaVO area : areas) {
-				oids += ","+area.getOid();
-				this.getAreaOids(area.getNodes(), oids);
-			}
-		} else {
-			areaOids += ","+oids;
-		}
-		return areaOids;
 	}
 
 	@Transactional

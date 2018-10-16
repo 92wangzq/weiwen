@@ -36,14 +36,14 @@ public class NewsController {
 	
 	@RequiresPermissions("news:list")
 	@RequestMapping(value="/searchNews", method=RequestMethod.GET)
-	public @ResponseBody ResponseEntity<PageInfo<NewsVO>> searchNews(NewsVO news, @RequestParam(name="limit", required=false)Integer limit, @RequestParam(name="offset", required=false)Integer offset) {
+	public @ResponseBody ResponseEntity<PageInfo<NewsVO>> searchNews(NewsVO news, @RequestParam(name="limit", required=false)Integer limit, @RequestParam(name="offset", required=false)Integer offset, HttpServletRequest request) {
 		if (limit == null || limit == 0) {
 			limit = 1;
 		}
 		if (offset == null || offset == 0) {
 			offset = 10;
 		}
-		return new ResponseEntity<PageInfo<NewsVO>>(this.newsService.getNews(news, limit, offset), HttpStatus.OK);
+		return new ResponseEntity<PageInfo<NewsVO>>(this.newsService.getNews(news, limit, offset, request), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/viewNews", method=RequestMethod.GET)

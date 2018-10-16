@@ -144,4 +144,11 @@ public class AdministrativeAreaServiceImpl implements IAdministrativeAreaService
 		return null;
 	}
 
+
+	@Override
+	public List<String> getChildOids(String parentID) {
+		List<String> oids = this.administrativeAreaMapper.selectChilOidsByParent(parentID);
+		return oids;
+	}
+
 }

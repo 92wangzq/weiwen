@@ -12,7 +12,7 @@ public interface INewsService {
 
 	BaseResult delete(String oid);
 
-	PageInfo<NewsVO> getNews(NewsVO news, Integer limit, Integer offset);
+	PageInfo<NewsVO> getNews(NewsVO news, Integer limit, Integer offset, HttpServletRequest request);
 
 	NewsVO getNews(String oid);
 

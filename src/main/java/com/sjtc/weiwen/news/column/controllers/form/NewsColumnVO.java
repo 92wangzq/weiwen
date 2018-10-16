@@ -3,6 +3,7 @@ package com.sjtc.weiwen.news.column.controllers.form;
 import java.io.Serializable;
 import java.util.List;
 
+import com.sjtc.weiwen.administrative.controllers.form.AdministrativeAreaVO;
 import com.sjtc.weiwen.user.controllers.form.UserVO;
 
 import lombok.AllArgsConstructor;
@@ -25,9 +26,11 @@ public class NewsColumnVO implements Serializable {
 
     private String title;
 
-    private String pOid;
+    private NewsColumnVO parent;
 
     private UserVO user;
+    
+    private AdministrativeAreaVO area;
     
     private List<NewsColumnVO> nodes;
     

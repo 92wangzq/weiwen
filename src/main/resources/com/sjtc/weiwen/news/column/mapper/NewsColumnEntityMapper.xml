@@ -113,8 +113,11 @@
 			<if test="userOid != null and title != ''">
 				and user_oid = #{userOid,jdbcType=VARCHAR}
 			</if>
-			<if test="areaOid != null and areaOid != ''">
-				and area_oid = #{areaOid,jdbcType=VARCHAR}
+			<if test="areaOids != null">
+				and area_oid in 
+				<foreach collection="areaOids" item="areaOid" index="index" open="(" separator="," close=")">
+					#{areaOid}
+				</foreach>
 			</if>
 		</where>
 	</select>
@@ -130,5 +133,28 @@
 				p_oid = '0'
 			</if>
 		</where>
+	</select>
+	<select id="selectParentNewsColumns" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_news_column
+		<where>
+			p_oid = '0'
+			<if test="title != null and title != ''">
+				and title like '%#{title,jdbcType=VARCHAR}%'
+			</if>
+			<if test="areaOids != null">
+				and area_oid in 
+				<foreach collection="areaOids" item="areaOid" index="index" open="(" separator="," close=")">
+					#{areaOid}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	<select id="selectNewsColumnOidsByArea" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT oid FROM t_news_column WHERE FIND_IN_SET(area_oid, getChildList(#{areaOid, jdbcType=VARCHAR}));
+	</select>
+	<select id="selectNewsColumnOidsByParent" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT oid FROM t_news_column WHERE FIND_IN_SET(oid, getNewsColumnChildList(#{parentOid, jdbcType=VARCHAR}));
 	</select>
 </mapper>

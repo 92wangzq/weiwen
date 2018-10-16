@@ -21,4 +21,10 @@ public interface IAdministrativeAreaService {
 	List<AdministrativeAreaVO> getAreaParent(String pOid);
 
 	List<String> getAreaOids(String oid);
+	
+	/**
+	 * 根据父级oid获取所有子级oid
+	 * @return
+	 */
+	List<String> getChildOids(String parentID);
 }

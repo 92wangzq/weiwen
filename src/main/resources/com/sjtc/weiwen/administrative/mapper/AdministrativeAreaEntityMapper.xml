@@ -97,4 +97,7 @@
 			p_oid = 0
 		</if>
 	</select>
+	<select id="selectChilOidsByParent" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT oid FROM t_administrative_area WHERE FIND_IN_SET(oid, getChildList(#{parentID}));
+	</select>
 </mapper>

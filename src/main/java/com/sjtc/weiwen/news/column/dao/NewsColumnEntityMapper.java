@@ -20,4 +20,10 @@ public interface NewsColumnEntityMapper {
 	List<NewsColumnEntity> selectNewsColumnsByFuzz(NewsColumnEntity params);
 
 	List<NewsColumnEntity> selectChildrensByPOid(String pOid);
+
+	List<NewsColumnEntity> selectParentNewsColumns(NewsColumnEntity params);
+
+	List<String> selectNewsColumnOidsByArea(String areaOid);
+
+	List<String> selectNewsColumnOidsByParent(String parentOid);
 }

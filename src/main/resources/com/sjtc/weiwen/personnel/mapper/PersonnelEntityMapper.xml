@@ -384,9 +384,6 @@
 		from t_personnel
 		<where>
 			1=1
-			<if test="areaOid != null and areaOid != ''">
-				and area_oid = #{areaOid,jdbcType=VARCHAR}
-			</if>
 			<if test="areaOids != null">
 				and area_oid in <foreach collection="areaOids" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
 			</if>

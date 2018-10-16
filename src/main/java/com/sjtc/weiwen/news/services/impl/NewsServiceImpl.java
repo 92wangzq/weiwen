@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -21,6 +23,7 @@ import com.sjtc.weiwen.news.controllers.form.NewsVO;
 import com.sjtc.weiwen.news.dao.NewsEntityMapper;
 import com.sjtc.weiwen.news.dao.entity.NewsEntity;
 import com.sjtc.weiwen.news.services.INewsService;
+import com.sjtc.weiwen.user.controllers.form.UserVO;
 import com.sjtc.weiwen.user.services.IUserService;
 
 @Service
@@ -68,10 +71,22 @@ public class NewsServiceImpl implements INewsService {
 	}
 
 	@Override
-	public PageInfo<NewsVO> getNews(NewsVO news, Integer limit, Integer offset) {
+	public PageInfo<NewsVO> getNews(NewsVO news, Integer limit, Integer offset, HttpServletRequest request) {
+		UserVO user = this.userService.getUser(request.getSession().getAttribute("user").toString());
 		NewsEntity params = new NewsEntity();
+		List<String> columnOids = new ArrayList<>();
+		if (news.getColumn() != null && !StringUtils.isEmpty(news.getColumn().getOid())) {
+			columnOids = this.newsColumnService.getNewsColumnOidsByParent(news.getColumn().getOid());
+			if (!CollectionUtils.isEmpty(columnOids)) {
+				params.setColumnOids(columnOids);
+			}
+		} else {
+			columnOids = this.newsColumnService.getNewsColumnOidsByArea(user.getArea().getOid());
+			if (!CollectionUtils.isEmpty(columnOids)) {
+				params.setColumnOids(columnOids);
+			}
+		}
 		params.setTitle(news.getTitle());
-		params.setColumnOid(news.getColumn().getOid());
 		params.setStartTime(news.getStartTime());
 		params.setEndTime(news.getEndTime());
 		Page<NewsEntity> page = PageHelper.startPage(offset, limit, true);

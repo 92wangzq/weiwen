@@ -14,10 +14,37 @@ public interface INewsColumnService {
 
 	BaseResult delete(String oid);
 
-	PageInfo<NewsColumnVO> getNewsColumns(NewsColumnVO newsColumn, Integer limit, Integer offset);
+	PageInfo<NewsColumnVO> getNewsColumns(NewsColumnVO newsColumn, Integer limit, Integer offset, HttpServletRequest request);
 
 	List<NewsColumnVO> getChildrens(String pOid);
 
 	NewsColumnVO getNewsColumn(String oid);
+
+	/**
+	 * 获取一级栏目
+	 * @return
+	 */
+	PageInfo<NewsColumnVO> getParentNewsColumns(NewsColumnVO newsColumn, Integer limit, Integer offset, HttpServletRequest request);
+
+	/**
+	 * 获取树形栏目
+	 * @param request
+	 * @return
+	 */
+	List<NewsColumnVO> newsColumnTreeview(HttpServletRequest request);
+	
+	/**
+	 * 根据所属区域id获取栏目oids
+	 * @param areaOid
+	 * @return
+	 */
+	List<String> getNewsColumnOidsByArea(String areaOid);
+
+	/**
+	 * 根据父级oid获取所有子级oid
+	 * @param oid
+	 * @return
+	 */
+	List<String> getNewsColumnOidsByParent(String oid);
 
 }

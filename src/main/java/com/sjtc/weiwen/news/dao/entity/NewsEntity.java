@@ -2,6 +2,7 @@ package com.sjtc.weiwen.news.dao.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,4 +38,8 @@ public class NewsEntity implements Serializable {
     private Date startTime;
     
     private Date endTime;
+    
+    
+    //查询条件
+    private List<String> columnOids;
 }

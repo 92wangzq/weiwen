@@ -1,6 +1,7 @@
 package com.sjtc.weiwen.news.column.dao.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,4 +30,6 @@ public class NewsColumnEntity implements Serializable {
     private String userOid;
     
     private String areaOid;
+    
+    private List<String> areaOids;
 }

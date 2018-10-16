@@ -24,4 +24,6 @@ public interface AdministrativeAreaEntityMapper {
 	List<AdministrativeAreaEntity> selectAreaListPage(AdministrativeAreaVO vo);
 
 	List<AdministrativeAreaEntity> selectChildrensByOid(String oid);
+
+	List<String> selectChilOidsByParent(String parentID);
 }
