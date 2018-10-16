@@ -48,7 +48,7 @@ public class ShiroConfig {
 		// <!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
 		filterChainDefinitionMap.put("/**", "authc");
 		// 配置shiro默认登录界面地址，前后端分离中登录界面跳转应由前端路由控制，后台仅返回json数据
-		shiroFilterFactoryBean.setLoginUrl("/unauth");
+		shiroFilterFactoryBean.setLoginUrl("/login.html");
 
 		// 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
 //		shiroFilterFactoryBean.setLoginUrl("/login");
