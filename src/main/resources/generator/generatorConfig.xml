@@ -22,22 +22,22 @@
 		</javaTypeResolver>
 		<!-- 生成模型的包名和位置 -->
 		<javaModelGenerator
-			targetPackage="com.sjtc.weiwen.lawrelated.dao.entity" targetProject="weiwen/src/main/java">
+			targetPackage="com.sjtc.weiwen.system.dao.entity" targetProject="weiwen/src/main/java">
 			<property name="enableSubPackages" value="true" />
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
 		<!-- 生成映射文件的包名和位置 -->
-		<sqlMapGenerator targetPackage="com.sjtc.weiwen.lawrelated.mapper"
+		<sqlMapGenerator targetPackage="com.sjtc.weiwen.system.mapper"
 			targetProject="weiwen/src/main/resources">
 			<property name="enableSubPackages" value="true" />
 		</sqlMapGenerator>
 		<!-- 生成DAO的包名和位置 -->
 		<javaClientGenerator type="XMLMAPPER"
-			targetPackage="com.sjtc.weiwen.lawrelated.dao" targetProject="weiwen/src/main/java">
+			targetPackage="com.sjtc.weiwen.system.dao" targetProject="weiwen/src/main/java">
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
 		<!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名 -->
-		<table tableName="t_law_related" domainObjectName="LawRelatedEntity"
+		<table tableName="t_sys_user_role" domainObjectName="SysUserRoleEntity"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false"></table>

@@ -8,7 +8,7 @@
 		<result column="available" property="available" jdbcType="BIT" />
 		<result column="name" property="name" jdbcType="VARCHAR" />
 		<result column="parent_id" property="parentId"
-			jdbcType="BIGINT" />
+			jdbcType="VARCHAR" />
 		<result column="parent_ids" property="parentIds"
 			jdbcType="VARCHAR" />
 		<result column="permission" property="permission"
@@ -42,7 +42,7 @@
 		values
 		(#{oid,jdbcType=VARCHAR}, #{available,jdbcType=BIT},
 		#{name,jdbcType=VARCHAR},
-		#{parentId,jdbcType=BIGINT},
+		#{parentId,jdbcType=VARCHAR},
 		#{parentIds,jdbcType=VARCHAR}, #{permission,jdbcType=VARCHAR},
 		#{resourceType,jdbcType=CHAR}, #{url,jdbcType=VARCHAR})
 	</insert>
@@ -86,7 +86,7 @@
 				#{name,jdbcType=VARCHAR},
 			</if>
 			<if test="parentId != null">
-				#{parentId,jdbcType=BIGINT},
+				#{parentId,jdbcType=VARCHAR},
 			</if>
 			<if test="parentIds != null">
 				#{parentIds,jdbcType=VARCHAR},
@@ -113,7 +113,7 @@
 				name = #{name,jdbcType=VARCHAR},
 			</if>
 			<if test="parentId != null">
-				parent_id = #{parentId,jdbcType=BIGINT},
+				parent_id = #{parentId,jdbcType=VARCHAR},
 			</if>
 			<if test="parentIds != null">
 				parent_ids = #{parentIds,jdbcType=VARCHAR},
@@ -137,7 +137,7 @@
 		#{available,jdbcType=BIT},
 		name = #{name,jdbcType=VARCHAR},
 		parent_id =
-		#{parentId,jdbcType=BIGINT},
+		#{parentId,jdbcType=VARCHAR},
 		parent_ids =
 		#{parentIds,jdbcType=VARCHAR},
 		permission =
@@ -182,8 +182,10 @@
 		WHERE
 		t2.user_oid = #{userOid, jdbcType=VARCHAR}))
 	</select>
-	<select id="selectPermissionsByFuzz" resultMap="BaseResultMap" parameterType="map">
-		select <include refid="Base_Column_List" />
+	<select id="selectPermissionsByFuzz" resultMap="BaseResultMap"
+		parameterType="map">
+		select
+		<include refid="Base_Column_List" />
 		from t_sys_permission
 		<where>
 			1=1
@@ -192,6 +194,9 @@
 			</if>
 			<if test="resourceType != null and resourceType != ''">
 				and resource_type = #{resourceType,jdbcType=CHAR}
+			</if>
+			<if test="parentId != null and parentId != ''">
+				and parent_id = #{parentId, jdbcType=VARCHAR}
 			</if>
 		</where>
 		order by oid asc

@@ -9,9 +9,10 @@
 		<result column="description" property="description"
 			jdbcType="VARCHAR" />
 		<result column="role" property="role" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		oid, available, description, role
+		oid, available, description, role, name
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
@@ -28,10 +29,11 @@
 	<insert id="insert"
 		parameterType="com.sjtc.weiwen.system.dao.entity.SysRoleEntity">
 		insert into t_sys_role (oid, available, description,
-		role)
+		role, name)
 		values (#{oid,jdbcType=VARCHAR}, #{available,jdbcType=BIT},
 		#{description,jdbcType=VARCHAR},
-		#{role,jdbcType=VARCHAR})
+		#{role,jdbcType=VARCHAR}, #{name,
+		jdbcType=VARCHAR})
 	</insert>
 	<insert id="insertSelective"
 		parameterType="com.sjtc.weiwen.system.dao.entity.SysRoleEntity">
@@ -49,6 +51,9 @@
 			<if test="role != null">
 				role,
 			</if>
+			<if test="name != null">
+				name,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="oid != null">
@@ -62,6 +67,9 @@
 			</if>
 			<if test="role != null">
 				#{role,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
 			</if>
 		</trim>
 	</insert>
@@ -78,6 +86,9 @@
 			<if test="role != null">
 				role = #{role,jdbcType=VARCHAR},
 			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
 		</set>
 		where oid = #{oid,jdbcType=VARCHAR}
 	</update>
@@ -88,7 +99,9 @@
 		#{available,jdbcType=BIT},
 		description =
 		#{description,jdbcType=VARCHAR},
-		role = #{role,jdbcType=VARCHAR}
+		role = #{role,jdbcType=VARCHAR},
+		name =
+		#{name,jdbcType=VARCHAR}
 		where
 		oid = #{oid,jdbcType=VARCHAR}
 	</update>
@@ -103,8 +116,10 @@
 		ON t2.user_oid = t3.oid
 		WHERE t3.oid = #{userOid,jdbcType=VARCHAR}
 	</select>
-	<select id="selectRoles" resultMap="BaseResultMap" parameterType="map">
-		select <include refid="Base_Column_List" />
+	<select id="selectRoles" resultMap="BaseResultMap"
+		parameterType="map">
+		select
+		<include refid="Base_Column_List" />
 		from t_sys_role
 		<where>
 			<if test="role != null and role != ''">

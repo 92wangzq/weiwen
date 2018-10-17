@@ -29,5 +29,9 @@ public class RoleVO implements Serializable {
 
     private String role;
     
+    private String name;
+    
     private List<PermissionVO> permissions;
+    
+    private String permissionOids;
 }

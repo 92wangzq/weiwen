@@ -13,21 +13,14 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class SysRoleEntity implements Serializable {
+public class SysUserRoleEntity implements Serializable {
 	
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = 3637875754057077785L;
+	private static final long serialVersionUID = 8248229212090109498L;
 
-	private String oid;
+	private String userOid;
 
-    private Boolean available;
-
-    private String description;
-
-    private String role;
-    
-    private String name;
-
+    private String roleOid;
 }
