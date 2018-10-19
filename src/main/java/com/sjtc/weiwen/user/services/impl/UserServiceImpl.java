@@ -1,21 +1,12 @@
 package com.sjtc.weiwen.user.services.impl;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.DESKeySpec;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +19,7 @@ import com.github.pagehelper.StringUtil;
 import com.sjtc.util.BaseResult;
 import com.sjtc.util.PageInfo;
 import com.sjtc.weiwen.administrative.services.IAdministrativeAreaService;
+import com.sjtc.weiwen.system.dao.entity.SysUserRoleEntity;
 import com.sjtc.weiwen.system.services.ISystemService;
 import com.sjtc.weiwen.user.controllers.form.UserVO;
 import com.sjtc.weiwen.user.dao.UserEntityMapper;
@@ -44,88 +36,53 @@ public class UserServiceImpl implements IUserService {
 	@Autowired
 	private ISystemService systemService;
 
-	@Override
-	public UserVO getAccount(String name, String pwd) {
-		return null;
-	}
-
 	@Transactional
 	@Override
 	public BaseResult save(UserVO user) {
 		BaseResult result = new BaseResult();
-		UserEntity entity = new UserEntity();
 		if (StringUtil.isEmpty(user.getOid())) {
+			UserEntity entity = new UserEntity();
 			entity.setOid(UUID.randomUUID().toString().replaceAll("-", ""));
 			entity.setRealName(user.getRealName());
 			entity.setUserName(user.getUserName());
-			entity.setUserPwd(new SimpleHash("md5", user.getUserPwd(), entity.getCredentialsSalt(), 2).toString());
-			entity.setUserTypeOid(user.getUserTypeOid());
-			entity.setAreaOid(user.getAreaOid());
+			entity.setSalt(UUID.randomUUID().toString().replace("-", ""));
+			entity.setUserPwd(
+					new SimpleHash("md5", user.getUserPwd(), ByteSource.Util.bytes(entity.getCredentialsSalt()), 2)
+							.toString());
+			entity.setState(UserEntity.STATE_NORMAL);
+			entity.setAreaOid(user.getArea().getOid());
 			entity.setInsertTime(new Date());
 			entity.setUpdateTime(new Date());
 			this.userMapper.insert(entity);
+			if (!StringUtils.isEmpty(user.getRoleOids())) {
+				String roleOids[] = user.getRoleOids().split(",");
+				for (String roleOid : roleOids) {
+					SysUserRoleEntity userRoleEntity = new SysUserRoleEntity();
+					userRoleEntity.setRoleOid(roleOid);
+					userRoleEntity.setUserOid(entity.getOid());
+					this.systemService.saveUserRole(userRoleEntity);
+				}
+			}
 		} else {
+			UserEntity entity = this.userMapper.selectByPrimaryKey(user.getOid());
 			entity.setRealName(user.getRealName());
 			entity.setUserName(user.getUserName());
-			entity.setUserTypeOid(user.getUserTypeOid());
-			entity.setAreaOid(user.getAreaOid());
+			entity.setState(user.getState());
+			entity.setAreaOid(user.getArea().getOid());
 			entity.setUpdateTime(new Date());
 			this.userMapper.updateByPrimaryKeySelective(entity);
+			this.systemService.deleteUserRole(entity.getOid());
+			if (!StringUtils.isEmpty(user.getRoleOids())) {
+				String roleOids[] = user.getRoleOids().split(",");
+				for (String roleOid : roleOids) {
+					SysUserRoleEntity userRoleEntity = new SysUserRoleEntity();
+					userRoleEntity.setRoleOid(roleOid);
+					userRoleEntity.setUserOid(entity.getOid());
+					this.systemService.saveUserRole(userRoleEntity);
+				}
+			}
 		}
 		return result;
-	}
-
-	/**
-	 * EDS的加密解密代码
-	 */
-	private static final byte[] DES_KEY = { 21, 1, -110, 82, -32, -85, -128, -65 };
-
-	@SuppressWarnings("restriction")
-	public static String encryptBasedDes(String data) {
-		String encryptedData = null;
-		try {
-			// DES算法要求有一个可信任的随机数源
-			SecureRandom sr = new SecureRandom();
-			DESKeySpec deskey = new DESKeySpec(DES_KEY);
-			// 创建一个密匙工厂，然后用它把DESKeySpec转换成一个SecretKey对象
-			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-			SecretKey key = keyFactory.generateSecret(deskey);
-			// 加密对象
-			Cipher cipher = Cipher.getInstance("DES");
-			cipher.init(Cipher.ENCRYPT_MODE, key, sr);
-			// 加密，并把字节数组编码成字符串
-			encryptedData = new sun.misc.BASE64Encoder().encode(cipher.doFinal(data.getBytes()));
-		} catch (Exception e) {
-			// log.error("加密错误，错误信息：", e);
-			throw new RuntimeException("加密错误，错误信息：", e);
-		}
-		return encryptedData;
-	}
-
-	/**
-	 * 解密
-	 * @param cryptData
-	 * @return
-	 */
-	@SuppressWarnings("restriction")
-	public static String decryptBasedDes(String cryptData) {
-		String decryptedData = null;
-		try {
-			// DES算法要求有一个可信任的随机数源
-			SecureRandom sr = new SecureRandom();
-			DESKeySpec deskey = new DESKeySpec(DES_KEY);
-			// 创建一个密匙工厂，然后用它把DESKeySpec转换成一个SecretKey对象
-			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-			SecretKey key = keyFactory.generateSecret(deskey);
-			// 解密对象
-			Cipher cipher = Cipher.getInstance("DES");
-			cipher.init(Cipher.DECRYPT_MODE, key, sr);
-			// 把字符串进行解码，解码为为字节数组，并解密
-			decryptedData = new String(cipher.doFinal(new sun.misc.BASE64Decoder().decodeBuffer(cryptData)));
-		} catch (Exception e) {
-			throw new RuntimeException("解密错误，错误信息：", e);
-		}
-		return decryptedData;
 	}
 
 	@Transactional
@@ -137,8 +94,12 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public PageInfo<UserVO> getUsers(UserVO user, Integer limit, Integer offset) {
+		UserEntity params = new UserEntity();
+		params.setRealName(user.getRealName());
+		params.setUserName(user.getUserName());
+		params.setState(user.getState());
 		Page<UserEntity> page = PageHelper.startPage(offset, limit, true);
-		List<UserEntity> entitys = this.userMapper.selectUsersByFuzz(user);
+		List<UserEntity> entitys = this.userMapper.selectUsersByFuzz(params);
 		if (entitys != null && entitys.size() > 0) {
 			List<UserVO> vos = new ArrayList<>();
 			for (UserEntity entity : entitys) {
@@ -146,10 +107,9 @@ public class UserServiceImpl implements IUserService {
 				vo.setOid(entity.getOid());
 				vo.setRealName(entity.getRealName());
 				vo.setUserName(entity.getUserName());
-				vo.setUserPwd(entity.getUserPwd());
-				vo.setUserTypeOid(entity.getUserTypeOid());
-				vo.setAreaOid(entity.getAreaOid());
+				vo.setState(entity.getState());
 				vo.setArea(this.administrativeAreaService.getArea(entity.getAreaOid()));
+				vo.setRoles(this.systemService.getRolesByUser(entity.getOid()));
 				vo.setInsertTime(entity.getInsertTime());
 				vo.setUpdateTime(entity.getUpdateTime());
 				vos.add(vo);
@@ -166,28 +126,6 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public BaseResult getUser(String loginName, String loginPwd, HttpServletRequest req, HttpServletResponse res) {
-		UserEntity user = this.userMapper.selectByUserName(loginName);
-		if (user== null) {
-			return new BaseResult("-1", "登录名或密码错误", null);
-		}
-		if (!loginPwd.equals(UserServiceImpl.decryptBasedDes(user.getUserPwd()))) {
-			return new BaseResult("-1", "登录名或密码错误", null);
-		}
-		HttpSession session = req.getSession();
-		session.setAttribute("user", user.getOid());
-		Cookie cookie = new Cookie("user",user.getRealName());
-        cookie.setPath("/");
-        cookie.setMaxAge(3600);
-        res.addCookie(cookie);
-        Cookie cookie2 = new Cookie("userType",user.getUserTypeOid());
-        cookie2.setPath("/");
-        cookie2.setMaxAge(3600);
-        res.addCookie(cookie2);
-		return new BaseResult();
-	}
-
-	@Override
 	public UserVO getUser(String oid) {
 		UserEntity entity = this.userMapper.selectByPrimaryKey(oid);
 		if (entity != null) {
@@ -196,9 +134,9 @@ public class UserServiceImpl implements IUserService {
 			vo.setRealName(entity.getRealName());
 			vo.setUserName(entity.getUserName());
 			vo.setUserPwd(entity.getUserPwd());
-			vo.setUserTypeOid(entity.getUserTypeOid());
-			vo.setAreaOid(entity.getAreaOid());
+			vo.setState(entity.getState());
 			vo.setArea(this.administrativeAreaService.getArea(entity.getAreaOid()));
+			vo.setRoles(this.systemService.getRolesByUser(entity.getOid()));
 			vo.setInsertTime(entity.getInsertTime());
 			vo.setUpdateTime(entity.getUpdateTime());
 			return vo;
@@ -215,8 +153,6 @@ public class UserServiceImpl implements IUserService {
 			vo.setRealName(entity.getRealName());
 			vo.setUserName(entity.getUserName());
 			vo.setUserPwd(entity.getUserPwd());
-			vo.setUserTypeOid(entity.getUserTypeOid());
-			vo.setAreaOid(entity.getAreaOid());
 			vo.setArea(this.administrativeAreaService.getArea(entity.getAreaOid()));
 			vo.setSalt(entity.getSalt());
 			vo.setState(entity.getState());
@@ -253,6 +189,18 @@ public class UserServiceImpl implements IUserService {
 			throw new IllegalArgumentException();
 		}
 		return null;
+	}
+
+	@Transactional
+	@Override
+	public BaseResult updateState(String oid, String state) {
+		UserEntity entity = this.userMapper.selectByPrimaryKey(oid);
+		if (entity == null) {
+			return new BaseResult("00001", "用户信息不存在", null);
+		}
+		entity.setState(state);
+		this.userMapper.updateByPrimaryKeySelective(entity);
+		return new BaseResult();
 	}
 
 }

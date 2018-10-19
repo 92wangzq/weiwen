@@ -28,36 +28,34 @@ public class UserVO implements Serializable {
 
 	private String oid;
 
-    private String userTypeOid;
+	private String realName;
 
-    private String areaOid;
+	private String userName;
 
-    private String realName;
+	private String userPwd;
 
-    private String userName;
+	private String salt;
 
-    private String userPwd;
-    
-    private String salt;
-    
-    private Integer state;
-    
-    private AdministrativeAreaVO area;
+	private String state;
 
-    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date insertTime;
+	private AdministrativeAreaVO area;
 
-    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date updateTime;
-    
-    /**
-     * 角色
-     */
-    private List<RoleVO> roles;
-    
-    /**
-	 * 密码盐.
-	 * 重新对盐重新进行了定义，用户名+salt，这样就更加不容易被破解
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date insertTime;
+
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date updateTime;
+
+	/**
+	 * 角色
+	 */
+	private List<RoleVO> roles;
+	
+	private String roleOids;
+	
+	/**
+	 * 密码盐. 重新对盐重新进行了定义，用户名+salt，这样就更加不容易被破解
+	 * 
 	 * @return
 	 */
 	public String getCredentialsSalt() {

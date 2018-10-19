@@ -6,4 +6,6 @@ public interface SysUserRoleEntityMapper {
     int insert(SysUserRoleEntity record);
 
     int insertSelective(SysUserRoleEntity record);
+
+	void deleteByUser(String userOid);
 }

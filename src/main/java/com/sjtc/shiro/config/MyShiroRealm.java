@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSON;
 import com.sjtc.weiwen.system.controllers.form.PermissionVO;
 import com.sjtc.weiwen.system.controllers.form.RoleVO;
 import com.sjtc.weiwen.user.controllers.form.UserVO;
+import com.sjtc.weiwen.user.dao.entity.UserEntity;
 import com.sjtc.weiwen.user.services.IUserService;
 
 public class MyShiroRealm extends AuthorizingRealm {
@@ -54,7 +55,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 		if (userInfo == null) {
 			return null;
 		}
-		if (userInfo.getState() == 1) {
+		if (userInfo.getState() == UserEntity.STATE_FROZEN) {
 			// 账户冻结
 			throw new LockedAccountException();
 		}

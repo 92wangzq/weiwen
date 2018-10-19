@@ -19,9 +19,11 @@ import com.sjtc.weiwen.system.controllers.form.RoleVO;
 import com.sjtc.weiwen.system.dao.SysPermissionEntityMapper;
 import com.sjtc.weiwen.system.dao.SysRoleEntityMapper;
 import com.sjtc.weiwen.system.dao.SysRolePermissionEntityMapper;
+import com.sjtc.weiwen.system.dao.SysUserRoleEntityMapper;
 import com.sjtc.weiwen.system.dao.entity.SysPermissionEntity;
 import com.sjtc.weiwen.system.dao.entity.SysRoleEntity;
 import com.sjtc.weiwen.system.dao.entity.SysRolePermissionEntity;
+import com.sjtc.weiwen.system.dao.entity.SysUserRoleEntity;
 import com.sjtc.weiwen.system.services.ISystemService;
 
 @Service
@@ -33,6 +35,8 @@ public class SystemServiceImpl implements ISystemService {
 	private SysRoleEntityMapper sysRoleMapper;
 	@Autowired
 	private SysRolePermissionEntityMapper sysRolePermissionMapper;
+	@Autowired
+	private SysUserRoleEntityMapper sysUserRoleMapper;
 
 	@Override
 	public List<RoleVO> getRolesByUser(String userOid) {
@@ -304,5 +308,18 @@ public class SystemServiceImpl implements ISystemService {
 			return vos;
 		}
 		return null;
+	}
+
+	@Transactional
+	@Override
+	public void saveUserRole(SysUserRoleEntity userRoleEntity) {
+		this.sysUserRoleMapper.insertSelective(userRoleEntity);
+		
+	}
+
+	@Transactional
+	@Override
+	public void deleteUserRole(String userOid) {
+		this.sysUserRoleMapper.deleteByUser(userOid);
 	}
 }

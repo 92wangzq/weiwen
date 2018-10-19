@@ -47,11 +47,11 @@ public class HomeController {
 			System.out.println(currentUser.getSession().getId());
 			currentUser.getSession().setAttribute("user", user.getOid());
 			Cookie userName = new Cookie("userName", user.getRealName());
-			userName.setMaxAge(3000);   //存活期为一个月 30*24*60*60
+			userName.setMaxAge(900);   //存活期为一个月 30*24*60*60
 			userName.setPath("/");
             res.addCookie(userName);
             Cookie userOid = new Cookie("userOid", user.getOid());
-            userOid.setMaxAge(3000);
+            userOid.setMaxAge(900);
             userOid.setPath("/");
             res.addCookie(userOid);
             

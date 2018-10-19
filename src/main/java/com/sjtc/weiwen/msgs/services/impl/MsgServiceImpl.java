@@ -16,9 +16,15 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sjtc.util.BaseResult;
 import com.sjtc.util.PageInfo;
+import com.sjtc.weiwen.msgs.controllers.form.MsgChildVO;
+import com.sjtc.weiwen.msgs.controllers.form.MsgParentVO;
 import com.sjtc.weiwen.msgs.controllers.form.MsgVO;
+import com.sjtc.weiwen.msgs.dao.MsgsChildEntityMapper;
 import com.sjtc.weiwen.msgs.dao.MsgsEntityMapper;
+import com.sjtc.weiwen.msgs.dao.MsgsParentEntityMapper;
+import com.sjtc.weiwen.msgs.dao.entity.MsgsChildEntity;
 import com.sjtc.weiwen.msgs.dao.entity.MsgsEntity;
+import com.sjtc.weiwen.msgs.dao.entity.MsgsParentEntity;
 import com.sjtc.weiwen.msgs.services.IMsgService;
 import com.sjtc.weiwen.user.controllers.form.UserVO;
 import com.sjtc.weiwen.user.services.IUserService;
@@ -29,28 +35,39 @@ public class MsgServiceImpl implements IMsgService {
 	@Autowired
 	private MsgsEntityMapper msgMapper;
 	@Autowired
+	private MsgsParentEntityMapper msgsParentMapper;
+	@Autowired
+	private MsgsChildEntityMapper msgsChildMapper;
+	@Autowired
 	private IUserService userService;
 
 	@Transactional
 	@Override
 	public BaseResult save(MsgVO vo) {
 		String receiverOids[] = vo.getReceiverOids().split(",");
+		String string = JSON.toJSON(SecurityUtils.getSubject().getPrincipal()).toString();
+		UserVO user = JSON.parseObject(string, UserVO.class);
+		MsgsParentEntity parentEntity = new MsgsParentEntity();
+		parentEntity.setOid(UUID.randomUUID().toString().replaceAll("-", ""));
+		parentEntity.setTitle(vo.getTitle());
+		parentEntity.setSender(user.getRealName());
+		parentEntity.setSenderOid(user.getOid());
+		parentEntity.setInsertTime(new Date());
+		this.msgsParentMapper.insert(parentEntity);
 		for (String receiverOid : receiverOids) {
-			String string = JSON.toJSON(SecurityUtils.getSubject().getPrincipal()).toString();
-			System.out.println(string);
-			UserVO user = JSON.parseObject(string, UserVO.class);
-			MsgsEntity entity = new MsgsEntity();
-			entity.setOid(UUID.randomUUID().toString().replaceAll("-", ""));
-			entity.setSenderOid(user.getOid());
-			entity.setSender(user.getRealName());
-			entity.setReceiverOid(receiverOid);
-			entity.setReceiver(this.userService.getUser(receiverOid).getRealName());
-			entity.setTitle(vo.getTitle());
-			entity.setMsgType(vo.getMsgType());
-			entity.setContent(vo.getContent());
-			entity.setState("0");
-			entity.setInsertTime(new Date());
-			this.msgMapper.insert(entity);
+			MsgsChildEntity childEntity = new MsgsChildEntity();
+			childEntity.setOid(UUID.randomUUID().toString().replaceAll("-", ""));
+			childEntity.setParentOid(parentEntity.getOid());
+			childEntity.setSenderOid(user.getOid());
+			childEntity.setSender(user.getRealName());
+			childEntity.setReceiverOid(receiverOid);
+			childEntity.setReceiver(this.userService.getUser(receiverOid).getRealName());
+			childEntity.setTitle(vo.getTitle());
+			childEntity.setMsgType(vo.getMsgType());
+			childEntity.setContent(vo.getContent());
+			childEntity.setState("0");
+			childEntity.setInsertTime(new Date());
+			this.msgsChildMapper.insert(childEntity);
 		}
 		return new BaseResult();
 	}
@@ -99,38 +116,28 @@ public class MsgServiceImpl implements IMsgService {
 	}
 
 	@Override
-	public PageInfo<MsgVO> getSenderMsgs(MsgVO msg, Integer limit, Integer offset) {
-		MsgsEntity params = new MsgsEntity();
+	public PageInfo<MsgParentVO> getSenderMsgs(MsgVO msg, Integer limit, Integer offset) {
+		MsgsParentEntity params = new MsgsParentEntity();
 		String string = JSON.toJSON(SecurityUtils.getSubject().getPrincipal()).toString();
-		System.out.println(string);
 		UserVO user = JSON.parseObject(string, UserVO.class);
 		params.setSenderOid(user.getOid());
 		params.setTitle(msg.getTitle());
-		params.setMsgType(msg.getMsgType());
-		params.setContent(msg.getContent());
-		params.setState(msg.getState());
 		params.setStartTime(msg.getStartTime());
 		params.setEndTime(msg.getEndTime());
-		Page<MsgsEntity> page = PageHelper.startPage(offset, limit, true);
-		List<MsgsEntity> list = this.msgMapper.selectMsgsByFuzz(params);
+		Page<MsgsParentEntity> page = PageHelper.startPage(offset, limit, true);
+		List<MsgsParentEntity> list = this.msgsParentMapper.selectMsgsByFuzz(params);
 		if (!CollectionUtils.isEmpty(list)) {
-			List<MsgVO> vos = new ArrayList<>();
-			for (MsgsEntity entity : list) {
-				MsgVO vo = new MsgVO();
+			List<MsgParentVO> vos = new ArrayList<>();
+			for (MsgsParentEntity entity : list) {
+				MsgParentVO vo = new MsgParentVO();
 				vo.setOid(entity.getOid());
-				vo.setSenderUser(this.userService.getUser(entity.getSenderOid()));
-				vo.setSender(entity.getSender());
-				vo.setReceiverUser(this.userService.getUser(entity.getReceiverOid()));
-				vo.setReceiver(entity.getReceiver());
+				vo.setSender(this.userService.getUser(entity.getSenderOid()));
 				vo.setTitle(entity.getTitle());
-				vo.setMsgType(entity.getMsgType());
-				vo.setContent(entity.getContent());
-				vo.setState(entity.getState());
 				vo.setInsertTime(entity.getInsertTime());
-				vo.setReadTime(entity.getReadTime());
+				vo.setChilds(this.getMsgChilds(entity.getOid()));
 				vos.add(vo);
 			}
-			PageInfo<MsgVO> pageInfo = new PageInfo<>();
+			PageInfo<MsgParentVO> pageInfo = new PageInfo<>();
 			pageInfo.setPageNum(page.getPageNum());
 			pageInfo.setPageSize(page.getPageSize());
 			pageInfo.setPages(page.getPages());
@@ -141,39 +148,59 @@ public class MsgServiceImpl implements IMsgService {
 		return null;
 	}
 
+	private List<MsgChildVO> getMsgChilds(String oid) {
+		List<MsgsChildEntity> list = this.msgsChildMapper.selectMsgsChildsByParent(oid);
+		if (!CollectionUtils.isEmpty(list)) {
+			List<MsgChildVO> vos = new ArrayList<>();
+			for (MsgsChildEntity childEntity : list) {
+				MsgChildVO vo = new MsgChildVO();
+				vo.setOid(childEntity.getOid());
+				vo.setSenderUser(this.userService.getUser(childEntity.getSenderOid()));
+				vo.setSender(childEntity.getSender());
+				vo.setReceiverUser(this.userService.getUser(childEntity.getReceiverOid()));
+				vo.setReceiver(childEntity.getReceiver());
+				vo.setTitle(childEntity.getTitle());
+				vo.setMsgType(childEntity.getMsgType());
+				vo.setContent(childEntity.getContent());
+				vo.setState(childEntity.getState());
+				vo.setInsertTime(childEntity.getInsertTime());
+				vo.setReadTime(childEntity.getReadTime());
+				vos.add(vo);
+			}
+			return vos;
+		}
+		return null;
+	}
+
 	@Override
-	public PageInfo<MsgVO> getReceiverMsgs(MsgVO msg, Integer limit, Integer offset) {
-		MsgsEntity params = new MsgsEntity();
+	public PageInfo<MsgChildVO> getReceiverMsgs(MsgVO msg, Integer limit, Integer offset) {
+		MsgsChildEntity params = new MsgsChildEntity();
 		String string = JSON.toJSON(SecurityUtils.getSubject().getPrincipal()).toString();
-		System.out.println(string);
 		UserVO user = JSON.parseObject(string, UserVO.class);
 		params.setReceiverOid(user.getOid());
 		params.setTitle(msg.getTitle());
-		params.setMsgType(msg.getMsgType());
-		params.setContent(msg.getContent());
-		params.setState(msg.getState());
 		params.setStartTime(msg.getStartTime());
 		params.setEndTime(msg.getEndTime());
-		Page<MsgsEntity> page = PageHelper.startPage(offset, limit, true);
-		List<MsgsEntity> list = this.msgMapper.selectMsgsByFuzz(params);
+		Page<MsgsChildEntity> page = PageHelper.startPage(offset, limit, true);
+		List<MsgsChildEntity> list = this.msgsChildMapper.selectMsgsByFuzz(params);
 		if (!CollectionUtils.isEmpty(list)) {
-			List<MsgVO> vos = new ArrayList<>();
-			for (MsgsEntity entity : list) {
-				MsgVO vo = new MsgVO();
-				vo.setOid(entity.getOid());
-				vo.setSenderUser(this.userService.getUser(entity.getSenderOid()));
-				vo.setSender(entity.getSender());
-				vo.setReceiverUser(this.userService.getUser(entity.getReceiverOid()));
-				vo.setReceiver(entity.getReceiver());
-				vo.setTitle(entity.getTitle());
-				vo.setMsgType(entity.getMsgType());
-				vo.setContent(entity.getContent());
-				vo.setState(entity.getState());
-				vo.setInsertTime(entity.getInsertTime());
-				vo.setReadTime(entity.getReadTime());
+			List<MsgChildVO> vos = new ArrayList<>();
+			for (MsgsChildEntity childEntity : list) {
+				MsgChildVO vo = new MsgChildVO();
+				vo.setOid(childEntity.getOid());
+				vo.setSenderUser(this.userService.getUser(childEntity.getSenderOid()));
+				vo.setSender(childEntity.getSender());
+				vo.setReceiverUser(this.userService.getUser(childEntity.getReceiverOid()));
+				vo.setReceiver(childEntity.getReceiver());
+				vo.setTitle(childEntity.getTitle());
+				vo.setMsgType(childEntity.getMsgType());
+				vo.setContent(childEntity.getContent());
+				vo.setState(childEntity.getState());
+				vo.setInsertTime(childEntity.getInsertTime());
+				vo.setReadTime(childEntity.getReadTime());
 				vos.add(vo);
 			}
-			PageInfo<MsgVO> pageInfo = new PageInfo<>();
+			PageInfo<MsgChildVO> pageInfo = new PageInfo<>();
 			pageInfo.setPageNum(page.getPageNum());
 			pageInfo.setPageSize(page.getPageSize());
 			pageInfo.setPages(page.getPages());
@@ -186,20 +213,27 @@ public class MsgServiceImpl implements IMsgService {
 
 	@Transactional
 	@Override
-	public BaseResult delete(String oid) {
-		MsgsEntity entity = this.msgMapper.selectByPrimaryKey(oid);
-		if (entity != null) {
-			entity.setState("1");
-			this.msgMapper.updateByPrimaryKeySelective(entity);
+	public BaseResult deleteParent(String oid) {
+		this.msgsParentMapper.deleteByPrimaryKey(oid);
+		return new BaseResult();
+	}
+
+	@Transactional
+	@Override
+	public BaseResult deleteChild(String oid) {
+		MsgsChildEntity childEntity = this.msgsChildMapper.selectByPrimaryKey(oid);
+		if (childEntity != null) {
+			childEntity.setState("1");
+			this.msgsChildMapper.updateByPrimaryKeySelective(childEntity);
 		}
-		return null;
+		return new BaseResult();
 	}
 
 	@Override
-	public MsgVO getMsg(String oid) {
-		MsgsEntity entity = this.msgMapper.selectByPrimaryKey(oid);
+	public MsgChildVO getMsg(String oid) {
+		MsgsChildEntity entity = this.msgsChildMapper.selectByPrimaryKey(oid);
 		if (entity != null) {
-			MsgVO vo = new MsgVO();
+			MsgChildVO vo = new MsgChildVO();
 			vo.setOid(entity.getOid());
 			vo.setSenderUser(this.userService.getUser(entity.getSenderOid()));
 			vo.setSender(entity.getSender());
@@ -219,11 +253,11 @@ public class MsgServiceImpl implements IMsgService {
 	@Transactional
 	@Override
 	public BaseResult read(String oid) {
-		MsgsEntity entity = this.msgMapper.selectByPrimaryKey(oid);
+		MsgsChildEntity entity = this.msgsChildMapper.selectByPrimaryKey(oid);
 		if (entity != null) {
 			entity.setState("2");
 			entity.setReadTime(new Date());
-			this.msgMapper.updateByPrimaryKeySelective(entity);
+			this.msgsChildMapper.updateByPrimaryKeySelective(entity);
 		}
 		return new BaseResult();
 	}

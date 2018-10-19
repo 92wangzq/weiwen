@@ -26,6 +26,7 @@
 		<fastjson.version>1.2.39</fastjson.version>
 		<shiro.version>1.4.0</shiro.version>
 		<shiro-redis.version>2.4.2.1-RELEASE</shiro-redis.version>
+		<activiti.version>5.21.0</activiti.version>
 	</properties>
 
 	<dependencies>
@@ -111,6 +112,12 @@
 			<artifactId>commons-codec</artifactId>
 		</dependency>
 		<!--UEditor依赖的jar包  end-->
+		<!-- activiti -->
+		<dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-spring-boot-starter-basic</artifactId>
+            <version>${activiti.version}</version>
+        </dependency>
 	</dependencies>
 
 	<build>

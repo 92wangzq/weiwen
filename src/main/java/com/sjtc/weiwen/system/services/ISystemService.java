@@ -6,6 +6,7 @@ import com.sjtc.util.BaseResult;
 import com.sjtc.util.PageInfo;
 import com.sjtc.weiwen.system.controllers.form.PermissionVO;
 import com.sjtc.weiwen.system.controllers.form.RoleVO;
+import com.sjtc.weiwen.system.dao.entity.SysUserRoleEntity;
 
 public interface ISystemService {
 
@@ -33,7 +34,7 @@ public interface ISystemService {
 	 * @return
 	 */
 	List<PermissionVO> getParentPermissionTreeview(String roleOid);
-	
+
 	/**
 	 * 根据角色获取权限
 	 * 
@@ -82,4 +83,18 @@ public interface ISystemService {
 	 * @return
 	 */
 	List<RoleVO> getRolesByUser(String userOid);
+
+	/**
+	 * 保存用户角色信息
+	 * 
+	 * @param userRoleEntity
+	 */
+	void saveUserRole(SysUserRoleEntity userRoleEntity);
+
+	/**
+	 * 删除用户角色信息
+	 * 
+	 * @param oid
+	 */
+	void deleteUserRole(String oid);
 }

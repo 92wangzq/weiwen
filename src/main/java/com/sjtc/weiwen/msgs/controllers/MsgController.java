@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sjtc.util.BaseResult;
 import com.sjtc.util.PageInfo;
+import com.sjtc.weiwen.msgs.controllers.form.MsgChildVO;
+import com.sjtc.weiwen.msgs.controllers.form.MsgParentVO;
 import com.sjtc.weiwen.msgs.controllers.form.MsgVO;
 import com.sjtc.weiwen.msgs.services.IMsgService;
 
@@ -32,11 +34,23 @@ public class MsgController {
 	 * @param oid
 	 * @return
 	 */
-	@RequestMapping(value = "/remove", method = { RequestMethod.GET,
+	@RequestMapping(value = "/removeSender", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json")
 	@ResponseBody
-	public ResponseEntity<BaseResult> remove(String oid) {
-		return new ResponseEntity<BaseResult>(this.msgService.delete(oid), HttpStatus.OK);
+	public ResponseEntity<BaseResult> removeSender(String oid) {
+		return new ResponseEntity<BaseResult>(this.msgService.deleteParent(oid), HttpStatus.OK);
+	}
+	
+	/**
+	 * 删除消息
+	 * @param oid
+	 * @return
+	 */
+	@RequestMapping(value = "/removeReceiver", method = { RequestMethod.GET,
+			RequestMethod.POST }, produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<BaseResult> removeReceiver(String oid) {
+		return new ResponseEntity<BaseResult>(this.msgService.deleteChild(oid), HttpStatus.OK);
 	}
 
 	/**
@@ -64,10 +78,10 @@ public class MsgController {
 	 */
 	@RequestMapping(value = "/msgSenderList", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json")
-	public @ResponseBody ResponseEntity<PageInfo<MsgVO>> msgSenderList(MsgVO vo,
+	public @ResponseBody ResponseEntity<PageInfo<MsgParentVO>> msgSenderList(MsgVO vo,
 			@RequestParam(value = "limit", required = false) Integer limit,
 			@RequestParam(value = "offset", required = false) Integer offset) {
-		return new ResponseEntity<PageInfo<MsgVO>>(this.msgService.getSenderMsgs(vo, limit, offset), HttpStatus.OK);
+		return new ResponseEntity<PageInfo<MsgParentVO>>(this.msgService.getSenderMsgs(vo, limit, offset), HttpStatus.OK);
 	}
 
 	/**
@@ -79,10 +93,10 @@ public class MsgController {
 	 */
 	@RequestMapping(value = "/msgReceiverList", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json")
-	public @ResponseBody ResponseEntity<PageInfo<MsgVO>> msgReceiverList(MsgVO vo,
+	public @ResponseBody ResponseEntity<PageInfo<MsgChildVO>> msgReceiverList(MsgVO vo,
 			@RequestParam(value = "limit", required = false) Integer limit,
 			@RequestParam(value = "offset", required = false) Integer offset) {
-		return new ResponseEntity<PageInfo<MsgVO>>(this.msgService.getReceiverMsgs(vo, limit, offset), HttpStatus.OK);
+		return new ResponseEntity<PageInfo<MsgChildVO>>(this.msgService.getReceiverMsgs(vo, limit, offset), HttpStatus.OK);
 	}
 	
 	/**
@@ -92,8 +106,8 @@ public class MsgController {
 	 */
 	@RequestMapping(value = "/viewMsg", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json")
-	public @ResponseBody ResponseEntity<MsgVO> viewMsg(@RequestParam("oid")String oid) {
-		return new ResponseEntity<MsgVO>(this.msgService.getMsg(oid), HttpStatus.OK);
+	public @ResponseBody ResponseEntity<MsgChildVO> viewMsg(@RequestParam("oid")String oid) {
+		return new ResponseEntity<MsgChildVO>(this.msgService.getMsg(oid), HttpStatus.OK);
 	}
 	
 	/**

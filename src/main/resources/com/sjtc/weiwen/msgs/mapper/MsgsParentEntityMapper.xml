@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.sjtc.weiwen.msgs.dao.MsgsParentEntityMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sjtc.weiwen.msgs.dao.entity.MsgsParentEntity">
+		<id column="oid" property="oid" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="sender" property="sender" jdbcType="VARCHAR" />
+		<result column="sender_oid" property="senderOid"
+			jdbcType="VARCHAR" />
+		<result column="insert_time" property="insertTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		oid, title, sender, sender_oid, insert_time
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_msgs_parent
+		where oid = #{oid,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_msgs_parent
+		where oid = #{oid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.sjtc.weiwen.msgs.dao.entity.MsgsParentEntity">
+		insert into t_msgs_parent (oid, title, sender,
+		sender_oid, insert_time)
+		values (#{oid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
+		#{sender,jdbcType=VARCHAR},
+		#{senderOid,jdbcType=VARCHAR}, #{insertTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.sjtc.weiwen.msgs.dao.entity.MsgsParentEntity">
+		insert into t_msgs_parent
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				oid,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="sender != null">
+				sender,
+			</if>
+			<if test="senderOid != null">
+				sender_oid,
+			</if>
+			<if test="insertTime != null">
+				insert_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="oid != null">
+				#{oid,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="sender != null">
+				#{sender,jdbcType=VARCHAR},
+			</if>
+			<if test="senderOid != null">
+				#{senderOid,jdbcType=VARCHAR},
+			</if>
+			<if test="insertTime != null">
+				#{insertTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.sjtc.weiwen.msgs.dao.entity.MsgsParentEntity">
+		update t_msgs_parent
+		<set>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="sender != null">
+				sender = #{sender,jdbcType=VARCHAR},
+			</if>
+			<if test="senderOid != null">
+				sender_oid = #{senderOid,jdbcType=VARCHAR},
+			</if>
+			<if test="insertTime != null">
+				insert_time = #{insertTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.sjtc.weiwen.msgs.dao.entity.MsgsParentEntity">
+		update t_msgs_parent
+		set title = #{title,jdbcType=VARCHAR},
+		sender = #{sender,jdbcType=VARCHAR},
+		sender_oid = #{senderOid,jdbcType=VARCHAR},
+		insert_time = #{insertTime,jdbcType=TIMESTAMP}
+		where oid = #{oid,jdbcType=VARCHAR}
+	</update>
+	<select id="selectMsgsByFuzz" resultMap="BaseResultMap"
+		parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from t_msgs_parent
+		<where>
+			1=1
+			<if test="senderOid != null and senderOid != ''">
+				and sender_oid = #{senderOid,jdbcType=VARCHAR}
+			</if>
+			<if test="title != null and title != ''">
+				and title like "%"#{title, jdbcType=VARCHAR}"%"
+			</if>
+			<if test="startTime != null">
+				and insert_time &gt; #{startTime, jdbcType=VARCHAR}
+			</if>
+			<if test="endTime != null">
+				and insert_time &lt; #{endTime, jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by insert_time desc
+	</select>
+</mapper>

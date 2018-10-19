@@ -2,7 +2,6 @@ package com.sjtc.weiwen.user.dao;
 
 import java.util.List;
 
-import com.sjtc.weiwen.user.controllers.form.UserVO;
 import com.sjtc.weiwen.user.dao.entity.UserEntity;
 
 public interface UserEntityMapper {
@@ -18,7 +17,7 @@ public interface UserEntityMapper {
 
     int updateByPrimaryKey(UserEntity record);
 
-	List<UserEntity> selectUsersByFuzz(UserVO user);
+	List<UserEntity> selectUsersByFuzz(UserEntity params);
 
 	UserEntity selectByUserName(String loginName);
 
