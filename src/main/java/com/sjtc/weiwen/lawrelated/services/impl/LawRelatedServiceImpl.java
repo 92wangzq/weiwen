@@ -10,21 +10,26 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sjtc.util.BaseResult;
 import com.sjtc.util.PageInfo;
+import com.sjtc.weiwen.administrative.services.IAdministrativeAreaService;
 import com.sjtc.weiwen.lawrelated.controllers.form.CaseTypeStatisticalVO;
 import com.sjtc.weiwen.lawrelated.controllers.form.LawRelatedVO;
 import com.sjtc.weiwen.lawrelated.dao.LawRelatedEntityMapper;
 import com.sjtc.weiwen.lawrelated.dao.entity.LawRelatedEntity;
 import com.sjtc.weiwen.lawrelated.services.ILawRelatedService;
+import com.sjtc.weiwen.system.services.ISystemDictionaryService;
+import com.sjtc.weiwen.user.controllers.form.UserVO;
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
@@ -34,15 +39,22 @@ public class LawRelatedServiceImpl implements ILawRelatedService {
 
 	@Autowired
 	private LawRelatedEntityMapper lawRelatedMapper;
+	@Autowired
+	private IAdministrativeAreaService administrativeAreaService;
+	@Autowired
+	private ISystemDictionaryService systemDictionaryService;
 
 	@Transactional
 	@Override
 	public BaseResult save(LawRelatedVO vo) {
 		BaseResult result = new BaseResult();
+		String userStr = JSON.toJSON(SecurityUtils.getSubject().getPrincipal()).toString();
+		UserVO user = JSON.parseObject(userStr, UserVO.class);
 		LawRelatedEntity entity = new LawRelatedEntity();
 		if (StringUtils.isEmpty(vo.getOid())) {
 			entity.setOid(UUID.randomUUID().toString().replace("-", ""));
 			entity.setRealName(vo.getRealName());
+			entity.setSex(vo.getSex());
 			entity.setNation(vo.getNation());
 			entity.setIdentityCard(vo.getIdentityCard());
 			entity.setBirthday(vo.getBirthday());
@@ -53,6 +65,7 @@ public class LawRelatedServiceImpl implements ILawRelatedService {
 			entity.setTelephone(vo.getTelephone());
 			entity.setAppeals(vo.getAppeals());
 			entity.setOriginalRealName(vo.getOriginalRealName());
+			entity.setOriginalSex(vo.getOriginalSex());
 			entity.setOriginalNation(vo.getOriginalNation());
 			entity.setOriginalIdentityCard(vo.getOriginalIdentityCard());
 			entity.setOriginalBirthday(vo.getOriginalBirthday());
@@ -62,9 +75,10 @@ public class LawRelatedServiceImpl implements ILawRelatedService {
 			entity.setOriginalDomicile(vo.getOriginalDomicile());
 			entity.setOriginalTelephone(vo.getOriginalTelephone());
 			entity.setOriginalAppeals(vo.getOriginalAppeals());
+			entity.setAreaOid(user.getArea().getOid());
 			entity.setCaseType(vo.getCaseType());
 			entity.setLetterVisitOrder(vo.getLetterVisitOrder());
-			entity.setPowerAffairsUnit(vo.getPowerAffairsUnit());
+			entity.setPowerAffairsUnit(vo.getPowerAffairsUnit().getOid());
 			entity.setAttendTo(vo.getAttendTo());
 			entity.setInsertTime(new Date());
 			entity.setUpdateTime(new Date());
@@ -75,6 +89,7 @@ public class LawRelatedServiceImpl implements ILawRelatedService {
 				throw new IllegalArgumentException();
 			}
 			entity.setRealName(vo.getRealName());
+			entity.setSex(vo.getSex());
 			entity.setNation(vo.getNation());
 			entity.setIdentityCard(vo.getIdentityCard());
 			entity.setBirthday(vo.getBirthday());
@@ -85,6 +100,7 @@ public class LawRelatedServiceImpl implements ILawRelatedService {
 			entity.setTelephone(vo.getTelephone());
 			entity.setAppeals(vo.getAppeals());
 			entity.setOriginalRealName(vo.getOriginalRealName());
+			entity.setOriginalSex(vo.getOriginalSex());
 			entity.setOriginalNation(vo.getOriginalNation());
 			entity.setOriginalIdentityCard(vo.getOriginalIdentityCard());
 			entity.setOriginalBirthday(vo.getOriginalBirthday());
@@ -96,7 +112,7 @@ public class LawRelatedServiceImpl implements ILawRelatedService {
 			entity.setOriginalAppeals(vo.getOriginalAppeals());
 			entity.setCaseType(vo.getCaseType());
 			entity.setLetterVisitOrder(vo.getLetterVisitOrder());
-			entity.setPowerAffairsUnit(vo.getPowerAffairsUnit());
+			entity.setPowerAffairsUnit(vo.getPowerAffairsUnit().getOid());
 			entity.setAttendTo(vo.getAttendTo());
 			entity.setUpdateTime(new Date());
 			this.lawRelatedMapper.updateByPrimaryKeySelective(entity);
@@ -114,6 +130,20 @@ public class LawRelatedServiceImpl implements ILawRelatedService {
 	@Override
 	public PageInfo<LawRelatedVO> getlawRelateds(LawRelatedVO lawRelated, Integer limit, Integer offset) {
 		LawRelatedEntity params = new LawRelatedEntity();
+		List<String> areaOids = new ArrayList<>();
+		if (lawRelated.getArea() != null && !StringUtils.isEmpty(lawRelated.getArea().getOid())) {
+			areaOids = this.administrativeAreaService.getChildOids(lawRelated.getArea().getOid());
+			if (!CollectionUtils.isEmpty(areaOids)) {
+				params.setAreaOids(areaOids);
+			}
+		} else {
+			String userStr = JSON.toJSON(SecurityUtils.getSubject().getPrincipal()).toString();
+			UserVO user = JSON.parseObject(userStr, UserVO.class);
+			areaOids = this.administrativeAreaService.getChildOids(user.getArea().getOid());
+			if (!CollectionUtils.isEmpty(areaOids)) {
+				params.setAreaOids(areaOids);
+			}
+		}
 		params.setRealName(lawRelated.getRealName());
 		params.setNation(lawRelated.getNation());
 		params.setIdentityCard(lawRelated.getIdentityCard());
@@ -130,6 +160,7 @@ public class LawRelatedServiceImpl implements ILawRelatedService {
 				LawRelatedVO vo = new LawRelatedVO();
 				vo.setOid(entity.getOid());
 				vo.setRealName(entity.getRealName());
+				vo.setSex(entity.getSex());
 				vo.setNation(entity.getNation());
 				vo.setIdentityCard(entity.getIdentityCard());
 				vo.setBirthday(entity.getBirthday());
@@ -140,6 +171,7 @@ public class LawRelatedServiceImpl implements ILawRelatedService {
 				vo.setTelephone(entity.getTelephone());
 				vo.setAppeals(entity.getAppeals());
 				vo.setOriginalRealName(entity.getOriginalRealName());
+				vo.setOriginalSex(entity.getOriginalSex());
 				vo.setOriginalNation(entity.getOriginalNation());
 				vo.setOriginalIdentityCard(entity.getOriginalIdentityCard());
 				vo.setOriginalBirthday(entity.getOriginalBirthday());
@@ -151,7 +183,7 @@ public class LawRelatedServiceImpl implements ILawRelatedService {
 				vo.setOriginalAppeals(entity.getOriginalAppeals());
 				vo.setCaseType(entity.getCaseType());
 				vo.setLetterVisitOrder(entity.getLetterVisitOrder());
-				vo.setPowerAffairsUnit(entity.getPowerAffairsUnit());
+				vo.setPowerAffairsUnit(this.systemDictionaryService.getDictionaryData(entity.getPowerAffairsUnit()));
 				vo.setAttendTo(entity.getAttendTo());
 				vo.setInsertTime(entity.getInsertTime());
 				vo.setUpdateTime(entity.getUpdateTime());
@@ -175,6 +207,7 @@ public class LawRelatedServiceImpl implements ILawRelatedService {
 			LawRelatedVO vo = new LawRelatedVO();
 			vo.setOid(entity.getOid());
 			vo.setRealName(entity.getRealName());
+			vo.setSex(entity.getSex());
 			vo.setNation(entity.getNation());
 			vo.setIdentityCard(entity.getIdentityCard());
 			vo.setBirthday(entity.getBirthday());
@@ -185,6 +218,7 @@ public class LawRelatedServiceImpl implements ILawRelatedService {
 			vo.setTelephone(entity.getTelephone());
 			vo.setAppeals(entity.getAppeals());
 			vo.setOriginalRealName(entity.getOriginalRealName());
+			vo.setOriginalSex(entity.getOriginalSex());
 			vo.setOriginalNation(entity.getOriginalNation());
 			vo.setOriginalIdentityCard(entity.getOriginalIdentityCard());
 			vo.setOriginalBirthday(entity.getOriginalBirthday());
@@ -196,7 +230,7 @@ public class LawRelatedServiceImpl implements ILawRelatedService {
 			vo.setOriginalAppeals(entity.getOriginalAppeals());
 			vo.setCaseType(entity.getCaseType());
 			vo.setLetterVisitOrder(entity.getLetterVisitOrder());
-			vo.setPowerAffairsUnit(entity.getPowerAffairsUnit());
+			vo.setPowerAffairsUnit(this.systemDictionaryService.getDictionaryData(entity.getPowerAffairsUnit()));
 			vo.setAttendTo(entity.getAttendTo());
 			vo.setInsertTime(entity.getInsertTime());
 			vo.setUpdateTime(entity.getUpdateTime());
@@ -223,6 +257,7 @@ public class LawRelatedServiceImpl implements ILawRelatedService {
 				LawRelatedVO vo = new LawRelatedVO();
 				vo.setOid(entity.getOid());
 				vo.setRealName(entity.getRealName());
+				vo.setSex(entity.getSex());
 				vo.setNation(entity.getNation());
 				vo.setIdentityCard(entity.getIdentityCard());
 				vo.setBirthday(entity.getBirthday());
@@ -233,6 +268,7 @@ public class LawRelatedServiceImpl implements ILawRelatedService {
 				vo.setTelephone(entity.getTelephone());
 				vo.setAppeals(entity.getAppeals());
 				vo.setOriginalRealName(entity.getOriginalRealName());
+				vo.setOriginalSex(entity.getOriginalSex());
 				vo.setOriginalNation(entity.getOriginalNation());
 				vo.setOriginalIdentityCard(entity.getOriginalIdentityCard());
 				vo.setOriginalBirthday(entity.getOriginalBirthday());
@@ -244,7 +280,7 @@ public class LawRelatedServiceImpl implements ILawRelatedService {
 				vo.setOriginalAppeals(entity.getOriginalAppeals());
 				vo.setCaseType(entity.getCaseType());
 				vo.setLetterVisitOrder(entity.getLetterVisitOrder());
-				vo.setPowerAffairsUnit(entity.getPowerAffairsUnit());
+				vo.setPowerAffairsUnit(this.systemDictionaryService.getDictionaryData(entity.getPowerAffairsUnit()));
 				vo.setAttendTo(entity.getAttendTo());
 				vo.setInsertTime(entity.getInsertTime());
 				vo.setUpdateTime(entity.getUpdateTime());

@@ -7,6 +7,7 @@
 		<id column="oid" property="oid" jdbcType="VARCHAR" />
 		<result column="real_name" property="realName"
 			jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="VARCHAR" />
 		<result column="nation" property="nation" jdbcType="VARCHAR" />
 		<result column="identity_card" property="identityCard"
 			jdbcType="VARCHAR" />
@@ -22,6 +23,8 @@
 			jdbcType="VARCHAR" />
 		<result column="appeals" property="appeals" jdbcType="VARCHAR" />
 		<result column="original_real_name" property="originalRealName"
+			jdbcType="VARCHAR" />
+		<result column="original_sex" property="originalSex"
 			jdbcType="VARCHAR" />
 		<result column="original_nation" property="originalNation"
 			jdbcType="VARCHAR" />
@@ -41,6 +44,7 @@
 			property="originalTelephone" jdbcType="VARCHAR" />
 		<result column="original_appeals" property="originalAppeals"
 			jdbcType="VARCHAR" />
+		<result column="area_oid" property="areaOid" jdbcType="VARCHAR" />
 		<result column="case_type" property="caseType"
 			jdbcType="VARCHAR" />
 		<result column="letter_visit_order" property="letterVisitOrder"
@@ -54,26 +58,29 @@
 		<result column="update_time" property="updateTime"
 			jdbcType="TIMESTAMP" />
 	</resultMap>
-	<resultMap type="com.sjtc.weiwen.lawrelated.dao.entity.LawRelatedEntity" id="GroupByCaseTypeResultMap" extends="BaseResultMap">
-		<result column="label" property="label"
-			jdbcType="VARCHAR" />
-		<result column="val" property="val"
-			jdbcType="FLOAT" />
+	<resultMap
+		type="com.sjtc.weiwen.lawrelated.dao.entity.LawRelatedEntity"
+		id="GroupByCaseTypeResultMap" extends="BaseResultMap">
+		<result column="label" property="label" jdbcType="VARCHAR" />
+		<result column="val" property="val" jdbcType="FLOAT" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		oid, real_name, nation, identity_card, birthday,
+		oid, real_name, sex, nation, identity_card, birthday,
 		political_status,
 		work_unit, present,
 		domicile, telephone, appeals,
-		original_real_name, original_nation,
+		original_real_name, original_sex, original_nation,
 		original_identity_card,
-		original_birthday, original_political_status, original_work_unit,
+		original_birthday, original_political_status,
+		original_work_unit,
 		original_present,
-		original_domicile, original_telephone,
-		original_appeals, case_type,
+		original_domicile,
+		original_telephone,
+		original_appeals, area_oid, case_type,
 		letter_visit_order,
 		power_affairs_unit,
-		attend_to, insert_time, update_time
+		attend_to, insert_time,
+		update_time
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
@@ -89,29 +96,38 @@
 	</delete>
 	<insert id="insert"
 		parameterType="com.sjtc.weiwen.lawrelated.dao.entity.LawRelatedEntity">
-		insert into t_law_related (oid, real_name, nation,
+		insert into t_law_related (oid, real_name, sex, nation,
 		identity_card, birthday, political_status,
 		work_unit, present,
 		domicile,
-		telephone, appeals, original_real_name,
+		telephone, appeals, original_real_name, original_sex,
 		original_nation,
 		original_identity_card, original_birthday,
 		original_political_status,
 		original_work_unit,
-		original_present, original_domicile,
+		original_present,
+		original_domicile,
 		original_telephone,
-		original_appeals, case_type, letter_visit_order,
-		power_affairs_unit, attend_to, insert_time,
+		original_appeals, area_oid,
+		case_type, letter_visit_order,
+		power_affairs_unit, attend_to,
+		insert_time,
 		update_time)
 		values
-		(#{oid,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR},
+		(#{oid,jdbcType=VARCHAR},
+		#{realName,jdbcType=VARCHAR},
+		#{sex, jdbcType=VARCHAR},
 		#{nation,jdbcType=VARCHAR},
 		#{identityCard,jdbcType=VARCHAR},
-		#{birthday,jdbcType=DATE}, #{politicalStatus,jdbcType=VARCHAR},
-		#{workUnit,jdbcType=VARCHAR}, #{present,jdbcType=VARCHAR},
+		#{birthday,jdbcType=DATE},
+		#{politicalStatus,jdbcType=VARCHAR},
+		#{workUnit,jdbcType=VARCHAR},
+		#{present,jdbcType=VARCHAR},
 		#{domicile,jdbcType=VARCHAR},
 		#{telephone,jdbcType=VARCHAR},
-		#{appeals,jdbcType=VARCHAR}, #{originalRealName,jdbcType=VARCHAR},
+		#{appeals,jdbcType=VARCHAR},
+		#{originalRealName,jdbcType=VARCHAR},
+		#{originalSex,jdbcType=VARCHAR},
 		#{originalNation,jdbcType=VARCHAR},
 		#{originalIdentityCard,jdbcType=VARCHAR},
 		#{originalBirthday,jdbcType=DATE},
@@ -120,7 +136,8 @@
 		#{originalPresent,jdbcType=VARCHAR},
 		#{originalDomicile,jdbcType=VARCHAR},
 		#{originalTelephone,jdbcType=VARCHAR},
-		#{originalAppeals,jdbcType=VARCHAR}, #{caseType,jdbcType=VARCHAR},
+		#{originalAppeals,jdbcType=VARCHAR}, #{areaOid, jdbcType=VARCHAR},
+		#{caseType,jdbcType=VARCHAR},
 		#{letterVisitOrder,jdbcType=VARCHAR},
 		#{powerAffairsUnit,jdbcType=VARCHAR}, #{attendTo,jdbcType=VARCHAR},
 		#{insertTime,jdbcType=TIMESTAMP},
@@ -135,6 +152,9 @@
 			</if>
 			<if test="realName != null">
 				real_name,
+			</if>
+			<if test="sex != null">
+				sex,
 			</if>
 			<if test="nation != null">
 				nation,
@@ -166,6 +186,9 @@
 			<if test="originalRealName != null">
 				original_real_name,
 			</if>
+			<if test="originalSex != null">
+				original_sex,
+			</if>
 			<if test="originalNation != null">
 				original_nation,
 			</if>
@@ -193,6 +216,9 @@
 			<if test="originalAppeals != null">
 				original_appeals,
 			</if>
+			<if test="areaOid != null">
+				area_oid,
+			</if>
 			<if test="caseType != null">
 				case_type,
 			</if>
@@ -218,6 +244,9 @@
 			</if>
 			<if test="realName != null">
 				#{realName,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				#{sex, jdbcType=VARCHAR},
 			</if>
 			<if test="nation != null">
 				#{nation,jdbcType=VARCHAR},
@@ -249,6 +278,9 @@
 			<if test="originalRealName != null">
 				#{originalRealName,jdbcType=VARCHAR},
 			</if>
+			<if test="originalSex != null">
+				#{originalSex,jdbcType=VARCHAR},
+			</if>
 			<if test="originalNation != null">
 				#{originalNation,jdbcType=VARCHAR},
 			</if>
@@ -276,6 +308,9 @@
 			<if test="originalAppeals != null">
 				#{originalAppeals,jdbcType=VARCHAR},
 			</if>
+			<if test="areaOid != null">
+				#{areaOid,jdbcType=VARCHAR},
+			</if>
 			<if test="caseType != null">
 				#{caseType,jdbcType=VARCHAR},
 			</if>
@@ -302,6 +337,9 @@
 		<set>
 			<if test="realName != null">
 				real_name = #{realName,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=VARCHAR},
 			</if>
 			<if test="nation != null">
 				nation = #{nation,jdbcType=VARCHAR},
@@ -334,6 +372,9 @@
 				original_real_name =
 				#{originalRealName,jdbcType=VARCHAR},
 			</if>
+			<if test="originalSex != null">
+				original_sex = #{originalSex,jdbcType=VARCHAR},
+			</if>
 			<if test="originalNation != null">
 				original_nation = #{originalNation,jdbcType=VARCHAR},
 			</if>
@@ -365,6 +406,9 @@
 			<if test="originalAppeals != null">
 				original_appeals = #{originalAppeals,jdbcType=VARCHAR},
 			</if>
+			<if test="areaOid != null">
+				area_oid = #{areaOid,jdbcType=VARCHAR},
+			</if>
 			<if test="caseType != null">
 				case_type = #{caseType,jdbcType=VARCHAR},
 			</if>
@@ -393,8 +437,11 @@
 		update t_law_related
 		set real_name =
 		#{realName,jdbcType=VARCHAR},
-		nation = #{nation,jdbcType=VARCHAR},
-		identity_card = #{identityCard,jdbcType=VARCHAR},
+		sex = #{sex,jdbcType=VARCHAR},
+		nation =
+		#{nation,jdbcType=VARCHAR},
+		identity_card =
+		#{identityCard,jdbcType=VARCHAR},
 		birthday =
 		#{birthday,jdbcType=DATE},
 		political_status =
@@ -407,9 +454,13 @@
 		#{telephone,jdbcType=VARCHAR},
 		appeals = #{appeals,jdbcType=VARCHAR},
 		original_real_name = #{originalRealName,jdbcType=VARCHAR},
-		original_nation = #{originalNation,jdbcType=VARCHAR},
-		original_identity_card = #{originalIdentityCard,jdbcType=VARCHAR},
-		original_birthday = #{originalBirthday,jdbcType=DATE},
+		original_sex = #{originalSex,jdbcType=VARCHAR},
+		original_nation =
+		#{originalNation,jdbcType=VARCHAR},
+		original_identity_card =
+		#{originalIdentityCard,jdbcType=VARCHAR},
+		original_birthday =
+		#{originalBirthday,jdbcType=DATE},
 		original_political_status =
 		#{originalPoliticalStatus,jdbcType=VARCHAR},
 		original_work_unit =
@@ -422,6 +473,8 @@
 		#{originalTelephone,jdbcType=VARCHAR},
 		original_appeals =
 		#{originalAppeals,jdbcType=VARCHAR},
+		area_oid = #{areaOid,
+		jdbcType=VARCHAR},
 		case_type =
 		#{caseType,jdbcType=VARCHAR},
 		letter_visit_order =
@@ -470,6 +523,11 @@
 			<if test="originalBirthday != null">
 				and original_birthday = #{originalBirthday,jdbcType=DATE}
 			</if>
+			<if test="areaOids != null">
+				and area_oid in
+				<foreach collection="areaOids" item="areaOid" index="index"
+					open="(" separator="," close=")">#{areaOid}</foreach>
+			</if>
 		</where>
 		order by insert_time desc
 	</select>
@@ -480,7 +538,9 @@
 		YEAR(insert_time) = #{year, jdbcType=INTEGER} AND MONTH(insert_time) =
 		#{month, jdbcType=INTEGER}
 	</select>
-	<select id="selectPercentageGroupByCaseType" resultMap="GroupByCaseTypeResultMap">
-		SELECT case_type label, COUNT(0)/(SELECT COUNT(0) FROM t_law_related)*100 val FROM t_law_related GROUP BY case_type
+	<select id="selectPercentageGroupByCaseType"
+		resultMap="GroupByCaseTypeResultMap">
+		SELECT case_type label, COUNT(0)/(SELECT COUNT(0) FROM
+		t_law_related)*100 val FROM t_law_related GROUP BY case_type
 	</select>
 </mapper>

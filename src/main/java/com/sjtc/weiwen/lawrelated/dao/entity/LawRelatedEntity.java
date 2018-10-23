@@ -2,6 +2,7 @@ package com.sjtc.weiwen.lawrelated.dao.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,8 @@ public class LawRelatedEntity implements Serializable {
 	private String oid;
 
     private String realName;
+    
+    private String sex;
 
     private String nation;
 
@@ -44,6 +47,8 @@ public class LawRelatedEntity implements Serializable {
     private String appeals;
 
     private String originalRealName;
+    
+    private String originalSex;
 
     private String originalNation;
 
@@ -62,6 +67,8 @@ public class LawRelatedEntity implements Serializable {
     private String originalTelephone;
 
     private String originalAppeals;
+    
+    private String areaOid;
 
     private String caseType;
 
@@ -74,6 +81,9 @@ public class LawRelatedEntity implements Serializable {
     private Date insertTime;
 
     private Date updateTime;
+    
+    //查询条件
+    private List<String> areaOids;
     
     //返回结果
     private String label;

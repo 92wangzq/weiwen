@@ -6,6 +6,8 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sjtc.weiwen.administrative.controllers.form.AdministrativeAreaVO;
+import com.sjtc.weiwen.system.controllers.form.DictionaryDataVO;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import lombok.AllArgsConstructor;
@@ -30,6 +32,8 @@ public class LawRelatedVO implements Serializable {
 
 	@Excel(name="信访人姓名", orderNum = "0")
     private String realName;
+	
+	private String sex;
 
 	@Excel(name="信访人民族", orderNum="1")
     private String nation;
@@ -62,6 +66,8 @@ public class LawRelatedVO implements Serializable {
 
 	@Excel(name="原案人姓名", orderNum="10")
     private String originalRealName;
+	
+	private String originalSex;
 
 	@Excel(name="原案人民族", orderNum="11")
     private String originalNation;
@@ -91,6 +97,8 @@ public class LawRelatedVO implements Serializable {
 
 	@Excel(name="原案人信访诉求", orderNum="19")
     private String originalAppeals;
+	
+	private AdministrativeAreaVO area;
 
 	@Excel(name="案件类型", replace = {"行政案件_XZ", "刑事案件_XS", "民事案件_MS"}, orderNum="20")
     private String caseType;
@@ -99,7 +107,7 @@ public class LawRelatedVO implements Serializable {
     private String letterVisitOrder;
 
 	@Excel(name="事权单位", orderNum="22")
-    private String powerAffairsUnit;
+    private DictionaryDataVO powerAffairsUnit;
 
 	@Excel(name="信访办理", orderNum="23")
     private String attendTo;

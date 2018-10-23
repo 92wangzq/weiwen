@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjtc.weiwen.system.dao.SysDictionaryEntityMapper" >
+  <resultMap id="BaseResultMap" type="com.sjtc.weiwen.system.dao.entity.SysDictionaryEntity" >
+    <id column="oid" property="oid" jdbcType="VARCHAR" />
+    <result column="dict_name" property="dictName" jdbcType="VARCHAR" />
+    <result column="dict_value" property="dictValue" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    oid, dict_name, dict_value
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_dictionary
+    where oid = #{oid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_sys_dictionary
+    where oid = #{oid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sjtc.weiwen.system.dao.entity.SysDictionaryEntity" >
+    insert into t_sys_dictionary (oid, dict_name, dict_value
+      )
+    values (#{oid,jdbcType=VARCHAR}, #{dictName,jdbcType=VARCHAR}, #{dictValue,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sjtc.weiwen.system.dao.entity.SysDictionaryEntity" >
+    insert into t_sys_dictionary
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="oid != null" >
+        oid,
+      </if>
+      <if test="dictName != null" >
+        dict_name,
+      </if>
+      <if test="dictValue != null" >
+        dict_value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="oid != null" >
+        #{oid,jdbcType=VARCHAR},
+      </if>
+      <if test="dictName != null" >
+        #{dictName,jdbcType=VARCHAR},
+      </if>
+      <if test="dictValue != null" >
+        #{dictValue,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sjtc.weiwen.system.dao.entity.SysDictionaryEntity" >
+    update t_sys_dictionary
+    <set >
+      <if test="dictName != null" >
+        dict_name = #{dictName,jdbcType=VARCHAR},
+      </if>
+      <if test="dictValue != null" >
+        dict_value = #{dictValue,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where oid = #{oid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sjtc.weiwen.system.dao.entity.SysDictionaryEntity" >
+    update t_sys_dictionary
+    set dict_name = #{dictName,jdbcType=VARCHAR},
+      dict_value = #{dictValue,jdbcType=VARCHAR}
+    where oid = #{oid,jdbcType=VARCHAR}
+  </update>
+</mapper>
