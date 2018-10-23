@@ -53,8 +53,25 @@
 		more, risk_rating,
 		event_appeals, insert_time, edit_time
 	</sql>
+	<sql id="Join_Base_Column_List">
+		t1.oid, t1.user_oid, t1.area_oid, t1.personnel_type_oid,
+		t1.real_name,
+		t1.sex, t1.nation,
+		t1.identity_card,
+		t1.birthday,
+		t1.work_unit, t1.political_status,
+		t1.domicile, t1.present,
+		t1.telephone,
+		t1.real_state,
+		t1.more, t1.risk_rating,
+		t1.event_appeals,
+		t1.insert_time, t1.edit_time
+	</sql>
 	<sql id="Blob_Column_List">
 		experience_results
+	</sql>
+	<sql id="Join_Blob_Column_List">
+		t1.experience_results
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
 		parameterType="java.lang.String">
@@ -373,69 +390,77 @@
 		#{insertTime,jdbcType=TIMESTAMP},
 		edit_time =
 		#{editTime,jdbcType=TIMESTAMP}
-		where oid = #{oid,jdbcType=VARCHAR}
+		where oid = #{oid,jdbcType=VARCHAR}15248590078
 	</update>
 	<select id="selectPersonnelsByFuzz"
 		resultMap="ResultMapWithBLOBs" parameterType="map">
 		select
-		<include refid="Base_Column_List" />
+		<include refid="Join_Base_Column_List" />
 		,
-		<include refid="Blob_Column_List" />
-		from t_personnel
+		<include refid="Join_Blob_Column_List" />
+		from t_personnel t1 left join t_family t2 on t1.oid = t2.personnel_oid
 		<where>
 			1=1
 			<if test="areaOids != null">
-				and area_oid in <foreach collection="areaOids" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+				and t1.area_oid in
+				<foreach collection="areaOids" index="index" item="item"
+					open="(" separator="," close=")">#{item}</foreach>
 			</if>
 			<if test="personnelTypeOid != null and personnelTypeOid != ''">
-				and personnel_type_oid =
+				and t1.personnel_type_oid =
 				#{personnelTypeOid,jdbcType=VARCHAR}
 			</if>
 			<if test="realName != null and realName != ''">
-				and real_name like "%"#{realName,jdbcType=VARCHAR}"%"
+				and t1.real_name like "%"#{realName,jdbcType=VARCHAR}"%"
 			</if>
 			<if test="sex != null and sex != ''">
-				and sex = #{sex,jdbcType=VARCHAR}
+				and t1.sex = #{sex,jdbcType=VARCHAR}
 			</if>
 			<if test="nation != null and nation != ''">
-				and nation = #{nation,jdbcType=VARCHAR}
+				and t1.nation = #{nation,jdbcType=VARCHAR}
 			</if>
 			<if test="identityCard != null and identityCard != ''">
-				and identity_card = #{identityCard,jdbcType=VARCHAR}
+				and t1.identity_card = #{identityCard,jdbcType=VARCHAR}
 			</if>
 			<if test="birthday != null and birthday != ''">
-				and birthday = #{birthday,jdbcType=DATE}
+				and t1.birthday = #{birthday,jdbcType=DATE}
 			</if>
 			<if test="workUnit != null and workUnit != ''">
-				and work_unit = #{workUnit,jdbcType=VARCHAR}
+				and t1.work_unit = #{workUnit,jdbcType=VARCHAR}
 			</if>
 			<if test="politicalStatus != null and politicalStatus != ''">
-				and political_status =
+				and t1.political_status =
 				#{politicalStatus,jdbcType=VARCHAR}
 			</if>
 			<if test="domicile != null and domicile != ''">
-				and domicile = #{domicile,jdbcType=VARCHAR}
+				and t1.domicile = #{domicile,jdbcType=VARCHAR}
 			</if>
 			<if test="present != null and present != ''">
-				and present = #{present,jdbcType=VARCHAR}
+				and t1.present = #{present,jdbcType=VARCHAR}
 			</if>
 			<if test="telephone != null and telephone != ''">
-				and telephone = #{telephone,jdbcType=VARCHAR}
+				and t1.telephone = #{telephone,jdbcType=VARCHAR}
 			</if>
 			<if test="realState != null and realState != ''">
-				and real_state = #{realState,jdbcType=VARCHAR}
+				and t1.real_state = #{realState,jdbcType=VARCHAR}
 			</if>
 			<if test="riskRating != null and riskRating != ''">
-				and risk_rating = #{riskRating,jdbcType=VARCHAR}
+				and t1.risk_rating = #{riskRating,jdbcType=VARCHAR}
 			</if>
 			<if test="eventAppeals != null and eventAppeals != ''">
-				and event_appeals = #{eventAppeals,jdbcType=VARCHAR}
+				and t1.event_appeals like
+				"%"#{eventAppeals,jdbcType=VARCHAR}"%"
 			</if>
 			<if test="experienceResults != null and experienceResults != ''">
-				and experience_results =
-				#{experienceResults,jdbcType=LONGVARCHAR}
+				and t1.experience_results like
+				"%"#{experienceResults,jdbcType=LONGVARCHAR}"%"
+			</if>
+			<if test="familyRealName != null and familyRealName != ''">
+				and t2.real_name like "%"#{familyRealName,
+				jdbcType=VARCHAR}"%"
 			</if>
 		</where>
+		group by t1.oid
 		order by insert_time desc
 	</select>
 </mapper>

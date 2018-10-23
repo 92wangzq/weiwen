@@ -105,9 +105,9 @@
 		<where>
 			1=1
 			<if test="title != null and title != ''">
-				and title like '%#{title,jdbcType=VARCHAR}%'
+				and title like "%"#{title,jdbcType=VARCHAR}"%"
 			</if>
-			<if test="pOid != null and title != ''">
+			<if test="pOid != null and pOid != ''">
 				and p_oid = #{pOid,jdbcType=VARCHAR}
 			</if>
 			<if test="userOid != null and title != ''">
@@ -141,7 +141,7 @@
 		<where>
 			p_oid = '0'
 			<if test="title != null and title != ''">
-				and title like '%#{title,jdbcType=VARCHAR}%'
+				and title like "%"#{title,jdbcType=VARCHAR}"%"
 			</if>
 			<if test="areaOids != null">
 				and area_oid in 

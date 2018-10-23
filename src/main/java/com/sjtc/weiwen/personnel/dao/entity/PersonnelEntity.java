@@ -59,4 +59,6 @@ public class PersonnelEntity {
     
     //查询条件
     private List<String> areaOids;
+    
+    private String familyRealName;
 }

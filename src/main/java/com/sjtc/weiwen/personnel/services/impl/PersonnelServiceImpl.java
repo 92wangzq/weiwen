@@ -157,6 +157,7 @@ public class PersonnelServiceImpl implements IPersonnelService {
 		params.setRiskRating(personnel.getRiskRating());
 		params.setEventAppeals(personnel.getEventAppeals());
 		params.setExperienceResults(personnel.getExperienceResults());
+		params.setFamilyRealName(personnel.getFamilyRealName());
 		Page<PersonnelEntity> page = PageHelper.startPage(offset, limit, true);
 		List<PersonnelEntity> list = this.personnelMapper.selectPersonnelsByFuzz(params);
 		if (list != null && list.size() > 0) {

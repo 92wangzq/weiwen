@@ -91,6 +91,7 @@ public class NewsColumnServiceImpl implements INewsColumnService {
 				vo.setParent(this.getNewsColumn(entity.getPOid()));
 				vo.setTitle(entity.getTitle());
 				vo.setUser(this.userService.getUser(entity.getUserOid()));
+				vo.setArea(this.administrativeAreaService.getArea(entity.getAreaOid()));
 				vos.add(vo);
 			}
 			PageInfo<NewsColumnVO> pageInfo = new PageInfo<>();

@@ -77,4 +77,6 @@ public class PersonnelVO implements Serializable {
     private String experienceResults;
     
     private String familyJson;
+    
+    private String familyRealName;
 }
