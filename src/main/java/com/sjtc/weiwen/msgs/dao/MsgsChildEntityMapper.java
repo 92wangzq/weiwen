@@ -22,4 +22,6 @@ public interface MsgsChildEntityMapper {
 	List<MsgsChildEntity> selectMsgsChildsByParent(String parentOid);
 
 	List<MsgsChildEntity> selectMsgsByFuzz(MsgsChildEntity params);
+
+	Integer selectUnreadMsgCountByUser(String userOid);
 }

@@ -261,4 +261,12 @@ public class MsgServiceImpl implements IMsgService {
 		}
 		return new BaseResult();
 	}
+
+	@Override
+	public Integer getUnreadMsgCount() {
+		String userStr = JSON.toJSON(SecurityUtils.getSubject().getPrincipal()).toString();
+		UserVO user = JSON.parseObject(userStr, UserVO.class);
+		Integer result = this.msgsChildMapper.selectUnreadMsgCountByUser(user.getOid());
+		return result;
+	}
 }

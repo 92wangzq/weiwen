@@ -18,4 +18,6 @@ public interface MsgsEntityMapper {
     int updateByPrimaryKey(MsgsEntity record);
 
 	List<MsgsEntity> selectMsgsByFuzz(MsgsEntity params);
+
+	int selectUnreadMsgCountByUser(String userOid);
 }

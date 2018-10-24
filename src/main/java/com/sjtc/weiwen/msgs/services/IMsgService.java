@@ -64,4 +64,10 @@ public interface IMsgService {
 	 */
 	BaseResult read(String oid);
 
+	/**
+	 * 未读消息数量
+	 * @return
+	 */
+	Integer getUnreadMsgCount();
+
 }

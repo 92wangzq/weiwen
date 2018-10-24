@@ -281,4 +281,7 @@
 		</where>
 		order by insert_time desc
 	</select>
+	<select id="selectUnreadMsgCountByUser" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select count(0) from t_msgs_child where receiver_oid = #{userOid, jdbcType=VARCHAR} and state = '0'
+	</select>
 </mapper>

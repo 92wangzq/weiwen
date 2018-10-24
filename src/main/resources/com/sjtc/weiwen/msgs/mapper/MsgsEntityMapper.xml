@@ -21,7 +21,8 @@
 			jdbcType="TIMESTAMP" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		oid, sender_oid, sender, receiver_oid, receiver, title, msg_type, content,
+		oid, sender_oid, sender, receiver_oid, receiver, title,
+		msg_type, content,
 		state,
 		insert_time, read_time
 	</sql>
@@ -41,11 +42,15 @@
 		insert into t_msgs (oid, sender_oid, sender,
 		receiver_oid, receiver, title,
 		msg_type, content, state,
-		insert_time, read_time)
-		values (#{oid,jdbcType=VARCHAR}, #{senderOid,jdbcType=VARCHAR},
+		insert_time,
+		read_time)
+		values (#{oid,jdbcType=VARCHAR},
+		#{senderOid,jdbcType=VARCHAR},
 		#{sender,jdbcType=VARCHAR},
-		#{receiverOid,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
-		#{msgType,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
+		#{receiverOid,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR},
+		#{title,jdbcType=VARCHAR},
+		#{msgType,jdbcType=VARCHAR},
+		#{content,jdbcType=VARCHAR},
 		#{state,jdbcType=VARCHAR},
 		#{insertTime,jdbcType=TIMESTAMP}, #{readTime,jdbcType=TIMESTAMP})
 	</insert>
@@ -163,16 +168,20 @@
 	<update id="updateByPrimaryKey"
 		parameterType="com.sjtc.weiwen.msgs.dao.entity.MsgsEntity">
 		update t_msgs
-		set sender_oid = #{senderOid,jdbcType=VARCHAR},
+		set sender_oid =
+		#{senderOid,jdbcType=VARCHAR},
 		sender = #{sender,jdbcType=VARCHAR},
 		receiver_oid = #{receiverOid,jdbcType=VARCHAR},
-		receiver = #{receiver,jdbcType=VARCHAR},
+		receiver =
+		#{receiver,jdbcType=VARCHAR},
 		title = #{title,jdbcType=VARCHAR},
 		msg_type = #{msgType,jdbcType=VARCHAR},
-		content = #{content,jdbcType=VARCHAR},
+		content =
+		#{content,jdbcType=VARCHAR},
 		state = #{state,jdbcType=VARCHAR},
 		insert_time = #{insertTime,jdbcType=TIMESTAMP},
-		read_time = #{readTime,jdbcType=TIMESTAMP}
+		read_time =
+		#{readTime,jdbcType=TIMESTAMP}
 		where oid = #{oid,jdbcType=VARCHAR}
 	</update>
 	<select id="selectMsgsByFuzz" resultMap="BaseResultMap"

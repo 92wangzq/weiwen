@@ -120,5 +120,11 @@ public class MsgController {
 	public @ResponseBody ResponseEntity<BaseResult> read(@RequestParam("oid")String oid) {
 		return new ResponseEntity<BaseResult>(this.msgService.read(oid), HttpStatus.OK);
 	}
+	
+	@RequestMapping(name = "未读消息数量", value = "/unreadMsgCount", method = {RequestMethod.GET, RequestMethod.POST})
+	@ResponseBody
+	public ResponseEntity<Integer> unreadMsgCount() {
+		return new ResponseEntity<Integer>(this.msgService.getUnreadMsgCount(), HttpStatus.OK);
+	}
 
 }
