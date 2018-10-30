@@ -65,4 +65,6 @@ public interface IUserService {
 	 * @return
 	 */
 	public BaseResult updateState(String oid, String state);
+
+	public List<UserVO> getAreaUsers();
 }

@@ -45,6 +45,18 @@ public class DocumentController {
 		return new ResponseEntity<PageInfo<DocumentVO>>(this.documentService.getDocuments(document, limit, offset), HttpStatus.OK);
 	}
 	
+	@RequestMapping(name = "获取待办", value = "/tasks", method = {RequestMethod.GET, RequestMethod.POST})
+	@ResponseBody
+	public ResponseEntity<PageInfo<DocumentVO>> tasks(DocumentVO document, @RequestParam(name="limit", required=false)Integer limit, @RequestParam(name="offset", required=false)Integer offset) {
+		if (limit == null || limit == 0) {
+			limit = 1;
+		}
+		if (offset == null || offset == 0) {
+			offset = 10;
+		}
+		return new ResponseEntity<PageInfo<DocumentVO>>(this.documentService.getTaskDocuments(document, limit, offset), HttpStatus.OK);
+	}
+	
 	@RequestMapping(value="/viewDocument", method=RequestMethod.GET)
 	public @ResponseBody ResponseEntity<DocumentVO> viewDocument(String oid) {
 		return new ResponseEntity<DocumentVO>(this.documentService.getDocument(oid), HttpStatus.OK);
@@ -53,5 +65,11 @@ public class DocumentController {
 	@RequestMapping(value="/download", method=RequestMethod.GET)
 	public void download(@RequestParam String oid, HttpServletRequest req, HttpServletResponse res) {
 		this.documentService.download(oid, req, res);
+	}
+	
+	@RequestMapping(name = "审批公文", value = "/approvalDocument", method = {RequestMethod.GET, RequestMethod.POST})
+	@ResponseBody
+	public ResponseEntity<BaseResult> approvalDocument(DocumentVO document) {
+		return new ResponseEntity<BaseResult>(this.documentService.approval(document), HttpStatus.OK);
 	}
 }

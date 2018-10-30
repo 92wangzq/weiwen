@@ -19,4 +19,8 @@ public interface IDocumentService {
 
 	void download(String oid, HttpServletRequest req, HttpServletResponse res);
 
+	PageInfo<DocumentVO> getTaskDocuments(DocumentVO document, Integer limit, Integer offset);
+
+	BaseResult approval(DocumentVO document);
+
 }

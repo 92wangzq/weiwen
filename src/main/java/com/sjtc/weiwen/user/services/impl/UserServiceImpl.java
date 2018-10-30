@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.StringUtil;
@@ -201,6 +203,31 @@ public class UserServiceImpl implements IUserService {
 		entity.setState(state);
 		this.userMapper.updateByPrimaryKeySelective(entity);
 		return new BaseResult();
+	}
+
+	@Override
+	public List<UserVO> getAreaUsers() {
+		String userStr = JSON.toJSON(SecurityUtils.getSubject().getPrincipal()).toString();
+		UserVO user = JSON.parseObject(userStr, UserVO.class);
+		List<UserEntity> list = this.userMapper.selectUsersByArea(user.getArea().getOid());
+		if (!CollectionUtils.isEmpty(list)) {
+			List<UserVO> vos = new ArrayList<>();
+			for (UserEntity entity : list) {
+				UserVO vo = new UserVO();
+				vo.setOid(entity.getOid());
+				vo.setRealName(entity.getRealName());
+				vo.setUserName(entity.getUserName());
+				vo.setUserPwd(entity.getUserPwd());
+				vo.setSalt(entity.getSalt());
+				vo.setState(entity.getState());
+				vo.setInsertTime(entity.getInsertTime());
+				vo.setUpdateTime(entity.getUpdateTime());
+				vo.setRoles(this.systemService.getRolesByUser(entity.getOid()));
+				vos.add(vo);
+			}
+			return vos;
+		}
+		return null;
 	}
 
 }

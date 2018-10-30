@@ -1,5 +1,7 @@
 package com.sjtc.weiwen.user.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,5 +51,11 @@ public class UserController {
 	@ResponseBody
 	public ResponseEntity<UserVO> viewUser(@RequestParam(value = "oid") String oid) {
 		return new ResponseEntity<UserVO>(this.userService.getUser(oid), HttpStatus.OK);
+	}
+	
+	@RequestMapping(name = "获取当前行政区域用户", value = "/searchAreaUsers", method = {RequestMethod.GET})
+	@ResponseBody
+	public ResponseEntity<List<UserVO>> searchAreaUsers() {
+		return new ResponseEntity<List<UserVO>>(this.userService.getAreaUsers(), HttpStatus.OK);
 	}
 }

@@ -18,4 +18,6 @@ public interface DocumentEntityMapper {
     int updateByPrimaryKey(DocumentEntity record);
 
 	List<DocumentEntity> selectDocumentsByFuzz(DocumentEntity params);
+
+	List<DocumentEntity> selectTaskDocumentsByFuzz(DocumentEntity params);
 }
